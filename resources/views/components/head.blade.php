@@ -7,3 +7,6 @@
 <!-- Custom CSS -->
 <link rel="icon" href="{{ asset('images/logo/mark.svg') }}" type="image/svg+xml">
 <link rel="stylesheet" href="css/styles.css">
+<script src="{{ asset('js/home.js') }}" defer></script>
+<script src="{{ asset('js/search.js') }}" defer></script>
+

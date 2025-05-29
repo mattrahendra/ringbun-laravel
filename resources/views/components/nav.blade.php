@@ -8,10 +8,11 @@
         </a>
         <!-- Menu Links -->
         <div class="hidden md:flex space-x-6">
-            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') }} text-gray-800 hover:text-yellow-300">Home</a>
-            <a href="{{ route('product') }}" class="{{ request()->routeIs('product') }} text-gray-800 hover:text-yellow-300">Product</a>
-            <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog') }} text-gray-800 hover:text-yellow-300">Blog</a>
-            <a href="{{ route('b2b') }}" class="{{ request()->routeIs('b2b') }} text-gray-800 hover:text-yellow-300">B2B</a>
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">Home</a>
+            <a href="{{ route('product') }}" class="{{ request()->routeIs('product') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">Product</a>
+            <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">About</a>
+            <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">Blog</a>
+            <a href="{{ route('b2b') }}" class="{{ request()->routeIs('b2b') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">B2B</a>
         </div>
     </div>
 
@@ -24,6 +25,7 @@
             <i class="fas fa-shopping-cart"></i>
             <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">15</span>
         </button>
+        
         <!-- Mobile Menu Button -->
         <div class="md:hidden">
             <button class="text-gray-800 hover:text-yellow-300 text-2xl" id="mobile-menu-btn">
