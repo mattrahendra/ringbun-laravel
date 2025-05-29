@@ -13,11 +13,9 @@
         <h1>This is blog</h1>
     </section>
 
-        <!-- Footer Section -->
+    <!-- Footer Section -->
     @include('components.footer')
 
-    <!-- Scripts -->
-    @include('components.script')
 </body>
 
 </html>

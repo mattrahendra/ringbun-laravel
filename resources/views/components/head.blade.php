@@ -9,4 +9,5 @@
 <link rel="stylesheet" href="css/styles.css">
 <script src="{{ asset('js/home.js') }}" defer></script>
 <script src="{{ asset('js/search.js') }}" defer></script>
+<script src="{{ asset('js/product/category.js') }}"></script>
 

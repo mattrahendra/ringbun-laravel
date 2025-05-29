@@ -3,11 +3,10 @@
 
 <head>
     @include('components.head')
-    <title>Ring Bun - Product</title>
+    <title>Ring Bun - Produk</title>
 </head>
 
-<body>
-
+<body class="bg-white">
     @include('components.nav')
 
     <!-- Products Section -->
@@ -17,7 +16,7 @@
 
             <!-- Category Tabs -->
             <div class="flex justify-center space-x-4 mb-8 overflow-x-auto">
-                @foreach ($categories as $category)
+                @foreach($categories as $category)
                 <button class="category-tab px-4 py-2 rounded-lg font-semibold text-gray-800 hover:bg-yellow-400 hover:text-white active:bg-yellow-400 active:text-white" data-category="category-{{ $category->id }}">{{ $category->name }}</button>
                 @endforeach
             </div>
@@ -34,19 +33,13 @@
 
             <!-- Products Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @foreach ($products as $product)
-                <div class="product-item category-{{ $product->category_id }} bg white p-6 rounded-xl shadow-lg cursor-pointer {{ $product->category_id != $categories->first()->id ? 'hidden' : '' }}" data-modal="modal-{{ $product->id }}">
+                @foreach($products as $product)
+                <div class="product-item category-{{ $product->category_id }} bg-white p-6 rounded-xl shadow-lg cursor-pointer {{ $product->category_id != $categories->first()->id ? 'hidden' : '' }}" data-modal="modal-{{ $product->id }}">
                     <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/300x200/png' }}" alt="{{ $product->name }}" class="w-full h-64 object-cover rounded-t-lg">
                     <div class="p-4 text-left">
-                        <h3 class="text-2xl font-semibold text-gray-800 mb-2">
-                            {{ $product->name }}
-                        </h3>
-                        <p class="text-gray-600 text-lg">
-                            {{ Str::limit($product->description, 50) }}
-                        </p>
-                        <p class="text-yellow-400 font-semibold text-lg">
-                            Rp {{ number_format($product->price, 0, ',', '.') }}
-                        </p>
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ $product->name }}</h3>
+                        <p class="text-gray-600 text-lg mb-4">{{ Str::limit($product->description, 50) }}</p>
+                        <p class="text-yellow-400 font-semibold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                     </div>
                 </div>
                 @endforeach
@@ -74,12 +67,7 @@
     </div>
     @endforeach
 
-    <!-- Footer Section -->
     @include('components.footer')
-
-    <!-- Scripts -->
-    @include('components.script')
-    <script src="{{ asset('js/product/category.js') }}"></script>
 </body>
 
 </html>
