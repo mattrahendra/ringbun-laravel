@@ -4,7 +4,7 @@
     <div class="flex items-center space-x-8">
         <!-- Logo -->
         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') }} text-xl font-bold text-yellow-400 flex items-center">
-            <img src="images/logo/logo.svg" alt="Ring Bun Logo" class="h-10 mr-2 inline-block">
+            <img src="/images/logo/logo.svg" alt="Ring Bun Logo" class="h-10 mr-2 inline-block">
         </a>
         <!-- Menu Links -->
         <div class="hidden md:flex space-x-6">
