@@ -9,7 +9,7 @@
 <body>
     @include('components.nav')
     <section class="pt-24 px-6">
-        @include('errors.404')
+        <h1>ayam</h1>
 
     </section>
 
