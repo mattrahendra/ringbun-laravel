@@ -22,7 +22,7 @@
                     <div class="p-4 text-left">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $blog->title }}</h3>
                         <p class="text-gray-600 text-sm mb-4">{{ Str::limit(strip_tags($blog->content), 100) }}</p>
-                        <p class="text-gray-500 text-sm">Published: {{ $blog->published_at->format('d M Y') }}</p>
+                        <p class="text-gray-500 text-sm">{{ $blog->published_at->format('d M Y') }}</p>
                     </div>
                 </a>
                 @empty
