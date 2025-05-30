@@ -3,12 +3,12 @@
         <div class="md:flex md:justify-between md:items-start mb-6">
             <!-- Brand Info -->
             <div class="mb-6 md:mb-0">
-                <img src="{{ asset('images/logo/logo.svg') }}" alt="Ring Bun Logo" class="h-10 mb-2 mx-auto md:mx-0">
+                <img src="{{ asset('/images/logo/logo.svg') }}" alt="Ring Bun Logo" class="h-10 mb-2 mx-auto md:mx-0">
                 <p class="text-sm text-gray-400">by Arina Kitchen - Homemade Goodness</p>
             </div>
             <!-- Halal certified -->
             <div class="mb-6 md:mb-0">
-                <img src="{{ asset('images/logo/halal.svg') }}" alt="Halal Logo" class=" h-32 mt-2 mx-auto md:mx-0">
+                <img src="{{ asset('/images/logo/halal.svg') }}" alt="Halal Logo" class=" h-32 mt-2 mx-auto md:mx-0">
             </div>
             <!-- Social Media -->
             <div class="mb-6 md:mb-0">
