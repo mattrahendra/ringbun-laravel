@@ -6,7 +6,7 @@
     <title>Ring Bun - Produk</title>
 </head>
 
-<body class="bg-white">
+<body class="bg-cream">
     @include('components.nav')
 
     <!-- Products Section -->
@@ -16,6 +16,7 @@
 
             <!-- Category Tabs -->
             <div class="flex justify-center space-x-4 mb-8 overflow-x-auto">
+                <button class="category-tab px-4 py-2 rounded-lg font-semibold text-gray-800 hover:bg-yellow-400 hover:text-white active:bg-yellow-400 active:text-white" data-category="all">All</button>
                 @foreach($categories as $category)
                 <button class="category-tab px-4 py-2 rounded-lg font-semibold text-gray-800 hover:bg-yellow-400 hover:text-white active:bg-yellow-400 active:text-white" data-category="category-{{ $category->id }}">{{ $category->name }}</button>
                 @endforeach
@@ -32,18 +33,33 @@
             </div>
 
             <!-- Products Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @foreach($products as $product)
-                <div class="product-item category-{{ $product->category_id }} bg-white p-6 rounded-xl shadow-lg cursor-pointer {{ $product->category_id != $categories->first()->id ? 'hidden' : '' }}" data-modal="modal-{{ $product->id }}">
-                    <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/300x200/png' }}" alt="{{ $product->name }}" class="w-full h-64 object-cover rounded-t-lg">
-                    <div class="p-4 text-left">
-                        <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ $product->name }}</h3>
-                        <p class="text-gray-600 text-lg mb-4">{{ Str::limit($product->description, 50) }}</p>
-                        <p class="text-yellow-400 font-semibold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @forelse($products as $product)
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg cursor-pointer group product-item category-{{ $product->category_id }} {{ $product->category_id != $categories->first()->id ? 'hidden' : '' }}" data-modal="modal-{{ $product->id }}">
+                    <div class="relative overflow-hidden">
+                        <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/300x200/png' }}"
+                            alt="{{ $product->name }}"
+                            class="w-full h-64 object-cover rounded-t-lg group-hover:scale-110 transition-transform duration-500">
+                        @if($product->stock > 50)
+                        <div class="absolute top-4 right-4 bg-yellow-400 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-heart mr-1"></i>Popular
+                        </div>
+                        @elseif($product->created_at->diffInDays() <= 7)
+                            <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-star mr-1"></i>Baru
+                        </div>
+                        @endif
                     </div>
+                <div class="p-4 text-left">
+                    <h3 class="text-2xl font-semibold text-brown">{{ $product->name }}</h3>
+                    <p class="text-gray-600 text-sm mb-2">{{ Str::limit($product->description, 50) }}</p>
+                    <p class="text-yellow-400 font-semibold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                 </div>
-                @endforeach
             </div>
+            @empty
+            <p class="text-center text-gray-600 col-span-3">Belum ada produk yang tersedia.</p>
+            @endforelse
+        </div>
         </div>
     </section>
 
@@ -57,7 +73,18 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/300x200/png' }}" alt="{{ $product->name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+            <div class="relative overflow-hidden">
+                <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/300x200/png' }}" alt="{{ $product->name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+                @if($product->stock > 50)
+                        <div class="absolute top-4 right-4 bg-yellow-400 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-heart mr-1"></i>Popular
+                        </div>
+                        @elseif($product->created_at->diffInDays() <= 7)
+                            <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-star mr-1"></i>Baru
+                        </div>
+                        @endif
+            </div>
             <p class="text-gray-600 text-lg mb-4">{{ $product->description ?? 'Tidak ada deskripsi.' }}</p>
             <p class="text-yellow-400 font-semibold text-lg mb-4">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
             <p class="text-gray-600 text-lg mb-4">Stok: {{ $product->stock }}</p>

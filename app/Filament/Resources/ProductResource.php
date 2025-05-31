@@ -30,8 +30,7 @@ class ProductResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Nama Produk')
                     ->required()
-                    ->maxLength(255)
-                    ->sortable(),
+                    ->maxLength(255),
                 Forms\Components\Textarea::make('description')
                     ->label('Deskripsi')
                     ->nullable()
@@ -42,8 +41,7 @@ class ProductResource extends Resource
                     ->required()
                     ->numeric()
                     ->prefix('Rp')
-                    ->step(0.01)
-                    ->sortable(),
+                    ->step(0.01),
                 Forms\Components\TextInput::make('stock')
                     ->label('Stok')
                     ->required()
