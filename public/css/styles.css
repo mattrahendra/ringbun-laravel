@@ -41,7 +41,99 @@
 }
 
 /* Penggunaan di elemen */
-body, a, button {
+body,
+a,
+button {
     font-family: 'Nourd', sans-serif;
     font-weight: 600;
+}
+
+.gradient-bg {
+    background: linear-gradient(135deg, #fefefe 0%, #fcf8f0 100%);
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #fcbd08 0%, #f0a500 100%);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(252, 189, 8, 0.4);
+}
+
+.hero-gradient {
+    background: linear-gradient(135deg, rgba(252, 189, 8, 0.9) 0%, rgba(240, 165, 0, 0.9) 100%);
+}
+
+.slide-content {
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+.carousel-slide {
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-indicator {
+    transition: all 0.3s ease;
+}
+
+.carousel-indicator.active {
+    background: #fcbd08;
+    transform: scale(1.2);
+}
+
+.carousel-control {
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.carousel-control:hover {
+    background: rgba(252, 189, 8, 0.9);
+    transform: scale(1.1);
+}
+
+.slide-enter {
+    animation: slideIn 0.8s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.floating-badge {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }

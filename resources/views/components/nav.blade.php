@@ -55,7 +55,7 @@
 </nav>
 
 <!-- Mobile Search Bar (for mobile devices) -->
-<div class="md:hidden fixed top-16 left-0 w-full bg-white z-40 px-6 py-3 shadow-md transform -translate-y-full transition-transform duration-300 ease-in-out" id="mobile-search-bar">
+<div class="fixed md:hidden top-16 left-0 w-full bg-white z-40 px-6 py-3 shadow-md transform -translate-y-full transition-transform duration-300 ease-in-out" id="mobile-search-bar">
     <div class="flex items-center bg-gray-50 rounded-lg px-3 py-2">
         <input
             type="text"
@@ -73,7 +73,7 @@
 </div>
 
 <!-- Mobile Menu -->
-<div class="md:hidden bg-white text-gray-800 p-4 space-y-2 hidden absolute top-16 left-0 w-full z-40" id="mobile-menu">
+<div class="fixed md:hidden bg-white text-gray-800 p-4 space-y-2 hidden top-16 left-0 w-full z-40" id="mobile-menu">
     <a href="{{ route('home') }}" class="{{ request()->routeIs('home') }} block hover:text-yellow-300">Home</a>
     <a href="{{ route('product') }}" class="{{ request()->routeIs('product') }} block hover:text-yellow-300">Product</a>
     <a href="{{ route('about') }}" class="{{ request()->routeIs('about') }} block hover:text-yellow-300">About</a>
