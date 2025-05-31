@@ -9,10 +9,26 @@
 <body class="bg-cream">
     @include('components.nav')
 
+    <!-- Hero Section -->
+    <section class="pt-32 pb-16 px-6 hero-gradient relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="text-center text-white">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 text-shadow slide-enter">Produk Kami</h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-shadow slide-enter">
+                    Temukan makanan dan minuman kesukaanmu di sini.
+                </p>
+                <div class="w-24 h-1 bg-white mx-auto rounded-full slide-enter"></div>
+            </div>
+        </div>
+        <!-- Decorative elements -->
+        <div class="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full floating-badge"></div>
+        <div class="absolute bottom-20 right-10 w-16 h-16 bg-white/10 rounded-full floating-badge" style="animation-delay: 1s;"></div>
+    </section>
+
     <!-- Products Section -->
     <section class="pt-24 pb-12 px-6 bg-gray-50">
         <div class="max-w-6xl mx-auto">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Our Products</h1>
 
             <!-- Category Tabs -->
             <div class="flex justify-center space-x-4 mb-8 overflow-x-auto">
@@ -94,6 +110,10 @@
     </div>
     @endforeach
 
+    <!-- CTA Section -->
+    @include('components.cta')
+
+    <!-- Footer -->
     @include('components.footer')
 </body>
 
