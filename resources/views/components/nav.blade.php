@@ -24,12 +24,14 @@
         </button>
 
         <!-- Search Form (Hidden by default) -->
-        <div class="hidden items-center bg-gray-50 rounded-lg px-3 py-2 transition-all duration-300" id="search-form">
+        <form action="{{ route('product')}}" methode="GET" class="hidden md:flex items-center bg-gray-50 rounded-lg px-3 py-2 transition-all duration-300" id="search-form">
             <input
                 type="text"
+                name='q'
                 placeholder="Search..."
                 class="bg-transparent border-none outline-none text-gray-800 placeholder-gray-500 text-sm w-48 lg:w-64"
                 id="search-input"
+                value="{{ request()->query('q') }}"
             >
             <button class="text-gray-600 hover:text-yellow-400 ml-2 transition-colors" id="search-submit">
                 <i class="fas fa-search text-sm"></i>
@@ -37,7 +39,7 @@
             <button class="text-gray-600 hover:text-red-500 ml-2 transition-colors" id="close-search">
                 <i class="fas fa-times text-sm"></i>
             </button>
-        </div>
+        </form>
 
         <!-- Shopping Cart -->
         <button class="text-gray-800 hover:text-yellow-300 relative text-xl">
@@ -56,11 +58,13 @@
 
 <!-- Mobile Search Bar (for mobile devices) -->
 <div class="fixed md:hidden top-16 left-0 w-full bg-white z-40 px-6 py-3 shadow-md transform -translate-y-full transition-transform duration-300 ease-in-out" id="mobile-search-bar">
-    <div class="flex items-center bg-gray-50 rounded-lg px-3 py-2">
+    <form class="flex items-center bg-gray-50 rounded-lg px-3 py-2">
         <input
             type="text"
+            name="q"
             placeholder="Search products..."
             class="bg-transparent border-none outline-none text-gray-800 placeholder-gray-500 flex-1"
+            value="{{ request()->query('q') }}"
             id="mobile-search-input"
         >
         <button class="text-gray-600 hover:text-yellow-400 ml-2 transition-colors" id="mobile-search-submit">
@@ -69,7 +73,7 @@
         <button class="text-gray-600 hover:text-red-500 ml-2 transition-colors" id="close-mobile-search">
             <i class="fas fa-times"></i>
         </button>
-    </div>
+    </form>
 </div>
 
 <!-- Mobile Menu -->

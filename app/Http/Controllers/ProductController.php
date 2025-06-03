@@ -10,10 +10,22 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        $query = $request->query('q');
+
         $categories = Category::all();
 
         // Ambil parameter sort dari URL
         $sort = $request->query('sort', 'name_asc');
+
+        $productsQuery = Product::query();
+
+        if ($query) {
+            // Filter produk berdasarkan nama
+            $productsQuery->where(function ($q) use ($query) {
+                $q->where('name', 'LIKE', "%{$query}%")
+                    ->orWhere('description', 'LIKE', "%{$query}%");
+            });
+        }
 
         // Query produk dengan sorting
         $products = Product::with('category');
@@ -37,6 +49,6 @@ class ProductController extends Controller
 
         $products = $products->get();
 
-        return view('product.index', compact('categories', 'products', 'sort'));
+        return view('product.index', compact('categories', 'products', 'sort', 'query'));
     }
 }

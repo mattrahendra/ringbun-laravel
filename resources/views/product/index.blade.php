@@ -30,6 +30,11 @@
     <section class="pt-24 pb-12 px-6 bg-gray-50">
         <div class="max-w-6xl mx-auto">
 
+            @if($query)
+            <p class="text-center text-gray-600 mb-8">Hasil pencarian untuk: <span class="font-semibold">{{ $query }}</span></p>
+            @endif
+
+
             <!-- Category Tabs -->
             <div class="flex justify-center space-x-4 mb-8 overflow-x-auto">
                 <button class="category-tab px-4 py-2 rounded-lg font-semibold text-gray-800 hover:bg-yellow-400 hover:text-white active:bg-yellow-400 active:text-white" data-category="all">All</button>
@@ -51,6 +56,7 @@
             <!-- Products Grid -->
             <div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 @forelse($products as $product)
+                @if(!$query || (str_contains(strtolower($product->name), strtolower($query)) || str_contains(strtolower($product->description ?? ''), strtolower($query))))
                 <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg cursor-pointer group product-item category-{{ $product->category_id }} {{ $product->category_id != $categories->first()->id ? 'hidden' : '' }}" data-modal="modal-{{ $product->id }}">
                     <div class="relative overflow-hidden">
                         <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/300x200/png' }}"
@@ -63,15 +69,16 @@
                         @elseif($product->created_at->diffInDays() <= 7)
                             <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
                             <i class="fas fa-star mr-1"></i>Baru
-                        </div>
-                        @endif
                     </div>
+                    @endif
+                </div>
                 <div class="p-4 text-left">
                     <h3 class="text-2xl font-semibold text-brown">{{ $product->name }}</h3>
                     <p class="text-gray-600 text-sm mb-2">{{ Str::limit($product->description, 50) }}</p>
                     <p class="text-yellow-400 font-semibold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                 </div>
             </div>
+            @endif
             @empty
             <p class="text-center text-gray-600 col-span-3">Belum ada produk yang tersedia.</p>
             @endforelse
@@ -92,21 +99,21 @@
             <div class="relative overflow-hidden">
                 <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/300x200/png' }}" alt="{{ $product->name }}" class="w-full h-64 object-cover rounded-lg mb-4">
                 @if($product->stock > 50)
-                        <div class="absolute top-4 right-4 bg-yellow-400 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                            <i class="fas fa-heart mr-1"></i>Popular
-                        </div>
-                        @elseif($product->created_at->diffInDays() <= 7)
-                            <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                            <i class="fas fa-star mr-1"></i>Baru
-                        </div>
-                        @endif
+                <div class="absolute top-4 right-4 bg-yellow-400 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    <i class="fas fa-heart mr-1"></i>Popular
+                </div>
+                @elseif($product->created_at->diffInDays() <= 7)
+                    <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    <i class="fas fa-star mr-1"></i>Baru
             </div>
-            <p class="text-gray-600 text-lg mb-4">{{ $product->description ?? 'Tidak ada deskripsi.' }}</p>
-            <p class="text-yellow-400 font-semibold text-lg mb-4">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-            <p class="text-gray-600 text-lg mb-4">Stok: {{ $product->stock }}</p>
-            <p class="text-gray-600 text-lg mb-4">Status: {{ $product->status == 'available' ? 'Tersedia' : 'Tidak Tersedia' }}</p>
-            <button class="bg-yellow-400 text-white px-4 py-2 rounded-lg hover:bg-yellow-500">Tambah ke Keranjang</button>
+            @endif
         </div>
+        <p class="text-gray-600 text-lg mb-4">{{ $product->description ?? 'Tidak ada deskripsi.' }}</p>
+        <p class="text-yellow-400 font-semibold text-lg mb-4">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+        <p class="text-gray-600 text-lg mb-4">Stok: {{ $product->stock }}</p>
+        <p class="text-gray-600 text-lg mb-4">Status: {{ $product->status == 'available' ? 'Tersedia' : 'Tidak Tersedia' }}</p>
+        <button class="bg-yellow-400 text-white px-4 py-2 rounded-lg hover:bg-yellow-500">Tambah ke Keranjang</button>
+    </div>
     </div>
     @endforeach
 
