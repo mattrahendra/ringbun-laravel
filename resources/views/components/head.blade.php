@@ -12,6 +12,7 @@
 <script src="{{ asset('/js/search.js') }}" defer></script>
 <script src="{{ asset('/js/blog/blog.js') }}" defer></script>
 <script src="{{ asset('/js/product/category.js') }}"></script>
+<script src="{{ asset('/js/product/cart-manager.js') }}"></script>
 <script src="{{ asset('/js/b2b/b2b.js') }}"></script>
 <script>
     tailwind.config = {

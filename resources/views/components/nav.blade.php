@@ -44,7 +44,7 @@
         <!-- Shopping Cart -->
         <a href="{{ route('product.cart') }}" class="text-gray-800 hover:text-yellow-300 relative text-xl">
             <i class="fas fa-shopping-cart"></i>
-            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">15</span>
+            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
         </a>
 
         <!-- Mobile Menu Button -->

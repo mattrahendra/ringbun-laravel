@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -66,8 +65,8 @@
                                 <div class="card-hover border border-gray-100 rounded-2xl p-4 group">
                                     <div class="flex gap-4">
                                         <img src="https://images.unsplash.com/photo-1549340418-33643752985e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
-                                             alt="Chocolate Bun"
-                                             class="w-20 h-20 object-cover rounded-xl group-hover:scale-110 transition-transform duration-300">
+                                            alt="Chocolate Bun"
+                                            class="w-20 h-20 object-cover rounded-xl group-hover:scale-110 transition-transform duration-300">
                                         <div class="flex-1">
                                             <h4 class="font-bold text-brown mb-1">Chocolate Sweet Bun</h4>
                                             <p class="text-sm text-gray-600 mb-2">Roti manis dengan isian cokelat premium</p>
@@ -84,8 +83,8 @@
                                 <div class="card-hover border border-gray-100 rounded-2xl p-4 group">
                                     <div class="flex gap-4">
                                         <img src="https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
-                                             alt="Beef Bun"
-                                             class="w-20 h-20 object-cover rounded-xl group-hover:scale-110 transition-transform duration-300">
+                                            alt="Beef Bun"
+                                            class="w-20 h-20 object-cover rounded-xl group-hover:scale-110 transition-transform duration-300">
                                         <div class="flex-1">
                                             <h4 class="font-bold text-brown mb-1">Beef Savory Bun</h4>
                                             <p class="text-sm text-gray-600 mb-2">Roti gurih dengan isian daging sapi</p>
@@ -144,8 +143,8 @@
                             <div class="border-t border-gray-200 pt-4">
                                 <div class="flex gap-2">
                                     <input id="promo-input" type="text"
-                                           placeholder="Kode promo"
-                                           class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-golden focus:border-transparent">
+                                        placeholder="Kode promo"
+                                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-golden focus:border-transparent">
                                     <button id="apply-promo-btn" class="bg-golden hover:bg-yellow-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
                                         Apply
                                     </button>
@@ -153,17 +152,16 @@
                                 <div id="promo-message" class="mt-2 text-sm hidden"></div>
                             </div>
 
-                            <!-- Checkout Button -->
                             <button id="checkout-btn"
-                                    class="w-full bg-golden hover:bg-yellow-500 text-white py-4 rounded-full font-bold text-lg transition-all duration-300 hover:transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                                    disabled>
+                                class="w-full bg-golden hover:bg-yellow-500 text-white py-4 rounded-full font-bold text-lg transition-all duration-300 hover:transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled>
                                 <i class="fas fa-credit-card mr-2"></i>
                                 Lanjut ke Pembayaran
                             </button>
 
                             <!-- Continue Shopping -->
                             <a href="{{ route('product') }}"
-                               class="block w-full text-center border-2 border-golden text-golden hover:bg-golden hover:text-white py-3 rounded-full font-semibold transition-all duration-300">
+                                class="block w-full text-center border-2 border-golden text-golden hover:bg-golden hover:text-white py-3 rounded-full font-semibold transition-all duration-300">
                                 <i class="fas fa-arrow-left mr-2"></i>
                                 Lanjut Belanja
                             </a>
@@ -199,9 +197,11 @@
         class CartManager {
             constructor() {
                 this.cart = this.getCart();
-                this.initializeCart();
+                this.discount = 0;
+                this.discountCode = '';
                 this.updateCartDisplay();
                 this.updateNavCartCount();
+                this.initializePromoCode();
             }
 
             getCart() {
@@ -214,29 +214,28 @@
                 this.updateNavCartCount();
             }
 
-            initializeCart() {
-                // Sample data for demonstration
-                if (this.cart.length === 0) {
-                    this.cart = [
-                        {
-                            id: 1,
-                            name: 'Sweet Chocolate Bun',
-                            price: 18000,
-                            quantity: 2,
-                            image: 'https://images.unsplash.com/photo-1549340418-33643752985e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-                            category: 'Sweet Buns'
-                        },
-                        {
-                            id: 2,
-                            name: 'Beef Savory Bun',
-                            price: 22000,
-                            quantity: 1,
-                            image: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-                            category: 'Savory Buns'
-                        }
-                    ];
-                    this.saveCart();
+            addToCart(productData, quantity = 1) {
+                // Check if product already exists in cart
+                const existingItemIndex = this.cart.findIndex(item => item.id == productData.id);
+
+                if (existingItemIndex !== -1) {
+                    // Update quantity if product exists
+                    this.cart[existingItemIndex].quantity += quantity;
+                } else {
+                    // Add new product to cart
+                    this.cart.push({
+                        id: parseInt(productData.id),
+                        name: productData.name,
+                        price: parseInt(productData.price),
+                        quantity: quantity,
+                        image: productData.image,
+                        category: productData.category
+                    });
                 }
+
+                this.saveCart();
+                this.updateCartDisplay();
+                this.showSuccessNotification('Produk berhasil ditambahkan ke keranjang!');
             }
 
             updateCartDisplay() {
@@ -314,22 +313,100 @@
                 this.cart.splice(index, 1);
                 this.saveCart();
                 this.updateCartDisplay();
+                this.showSuccessNotification('Produk berhasil dihapus dari keranjang!');
             }
 
             updateSummary() {
                 const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 const tax = Math.round(subtotal * 0.11);
-                const total = subtotal + tax;
+                const discountAmount = Math.round(subtotal * this.discount);
+                const total = subtotal + tax - discountAmount;
 
                 document.getElementById('subtotal').textContent = this.formatNumber(subtotal);
                 document.getElementById('tax').textContent = this.formatNumber(tax);
                 document.getElementById('total').textContent = this.formatNumber(total);
             }
 
+            initializePromoCode() {
+                const promoInput = document.getElementById('promo-input');
+                const applyBtn = document.getElementById('apply-promo-btn');
+                const promoMessage = document.getElementById('promo-message');
+
+                applyBtn.addEventListener('click', () => {
+                    const code = promoInput.value.trim().toUpperCase();
+                    this.applyPromoCode(code, promoMessage);
+                });
+
+                promoInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const code = promoInput.value.trim().toUpperCase();
+                        this.applyPromoCode(code, promoMessage);
+                    }
+                });
+            }
+
+            applyPromoCode(code, messageElement) {
+                const promoCodes = {
+                    'WELCOME10': {
+                        discount: 0.10,
+                        description: 'Diskon 10% untuk pelanggan baru'
+                    },
+                    'SAVE20': {
+                        discount: 0.20,
+                        description: 'Diskon 20% pembelian minimal Rp 100.000'
+                    },
+                    'RINGBUN15': {
+                        discount: 0.15,
+                        description: 'Diskon 15% khusus member'
+                    }
+                };
+
+                if (promoCodes[code]) {
+                    const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+                    // Check minimum purchase for SAVE20
+                    if (code === 'SAVE20' && subtotal < 100000) {
+                        this.showPromoMessage(messageElement, 'Minimal pembelian Rp 100.000 untuk kode ini', 'error');
+                        return;
+                    }
+
+                    this.discount = promoCodes[code].discount;
+                    this.discountCode = code;
+                    this.updateSummary();
+                    this.showPromoMessage(messageElement, `Kode promo berhasil diterapkan! ${promoCodes[code].description}`, 'success');
+                } else if (code === '') {
+                    this.showPromoMessage(messageElement, 'Silakan masukkan kode promo', 'error');
+                } else {
+                    this.showPromoMessage(messageElement, 'Kode promo tidak valid', 'error');
+                }
+            }
+
+            showPromoMessage(element, message, type) {
+                element.textContent = message;
+                element.classList.remove('hidden', 'text-green-600', 'text-red-600');
+                element.classList.add(type === 'success' ? 'text-green-600' : 'text-red-600');
+
+                setTimeout(() => {
+                    element.classList.add('hidden');
+                }, 5000);
+            }
+
+            showSuccessNotification(message) {
+                const notification = document.getElementById('success-notification');
+                const messageSpan = document.getElementById('notification-message');
+                messageSpan.textContent = message;
+                notification.classList.remove('translate-x-full');
+
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                }, 3000);
+            }
+
             updateNavCartCount() {
                 const cartCount = document.querySelector('nav .fa-shopping-cart + span');
                 if (cartCount) {
-                    cartCount.textContent = this.cart.length;
+                    const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+                    cartCount.textContent = totalItems;
                 }
             }
 
@@ -338,10 +415,32 @@
             }
         }
 
+        // Function to add recommended products to cart
+        function addRecommendedToCart(id, name, price, image, category) {
+            const productData = {
+                id: id,
+                name: name,
+                price: price,
+                image: image,
+                category: category
+            };
+            cartManager.addToCart(productData, 1);
+        }
+
         // Initialize cart when page loads
         let cartManager;
         document.addEventListener('DOMContentLoaded', function() {
             cartManager = new CartManager();
+
+            // Initialize checkout button functionality
+            const checkoutBtn = document.getElementById('checkout-btn');
+            checkoutBtn.addEventListener('click', function() {
+                if (cartManager.cart.length > 0) {
+                    // Here you can redirect to checkout page or show checkout modal
+                    alert('Fitur checkout akan segera tersedia!');
+                    // window.location.href = '/checkout';
+                }
+            });
         });
     </script>
 
