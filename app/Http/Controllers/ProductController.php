@@ -51,4 +51,9 @@ class ProductController extends Controller
 
         return view('product.index', compact('categories', 'products', 'sort', 'query'));
     }
+
+    public function cart()
+    {
+        return view('product.cart');
+    }
 }
