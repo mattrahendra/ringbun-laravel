@@ -12,35 +12,50 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\{TextInput, Textarea, FileUpload, DateTimePicker, Select, RichEditor};
 
 class BlogResource extends Resource
 {
     protected static ?string $model = Blog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->label('Judul')
+                TextInput::make('title')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('content')
-                    ->label('Konten')
+                TextInput::make('slug')
                     ->required()
-                    ->rows(10),
-                Forms\Components\FileUpload::make('image')
-                    ->label('Gambar')
+                    ->maxLength(255),
+
+                // SEO Fields
+                TextInput::make('meta_title')->label('Meta Title'),
+                Textarea::make('meta_description')->label('Meta Description'),
+                TextInput::make('meta_keywords')->label('Meta Keywords'),
+
+                // Content
+                RichEditor::make('content')
+                    ->required(),
+
+                // Images
+                FileUpload::make('image')
                     ->image()
-                    ->directory('blog-images')
-                    ->nullable(),
-                Forms\Components\DateTimePicker::make('published_at')
-                    ->label('Tanggal Terbit')
-                    ->nullable(),
-                Forms\Components\Select::make('status')
-                    ->label('Status')
+                    ->directory('blogs/images'),
+                FileUpload::make('thumbnail')
+                    ->image()
+                    ->directory('blogs/thumbnails'),
+
+                // Dates
+                DateTimePicker::make('published_at'),
+
+                // Canonical URL
+                TextInput::make('canonical_url'),
+
+                // Status
+                Select::make('status')
                     ->options([
                         'draft' => 'Draft',
                         'published' => 'Published',
@@ -55,31 +70,14 @@ class BlogResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->label('Judul')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\ImageColumn::make('image')
-                    ->label('Gambar')
-                    ->square(),
-                Tables\Columns\TextColumn::make('published_at')
-                    ->label('Tanggal Publikasi')
-                    ->dateTime('d-M-Y')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->label('Status')
-                    ->badge()
-                    ->color(fn ($state) => $state === 'published' ? 'success' : ($state === 'draft' ? 'warning' : 'danger')),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tanggal Dibuat')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('title')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('slug'),
+                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('published_at')->dateTime(),
+                Tables\Columns\ImageColumn::make('thumbnail')->label('Thumb'),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->label('Created'),
             ])
+            ->defaultSort('published_at', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([

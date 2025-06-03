@@ -9,9 +9,9 @@
         <!-- Menu Links -->
         <div class="hidden md:flex space-x-6">
             <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">Home</a>
-            <a href="{{ route('product') }}" class="{{ request()->routeIs('product') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">Product</a>
+            <a href="{{ route('product') }}" class="{{ request()->routeIs('product', 'product.cart') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">Product</a>
             <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">About</a>
-            <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">Blog</a>
+            <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog', 'blog.show') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">Blog</a>
             <a href="{{ route('b2b') }}" class="{{ request()->routeIs('b2b') ? 'border-b-2 border-yellow-400 text-yellow-400' : 'text-gray-800 hover:text-yellow-300' }}">B2B</a>
         </div>
     </div>

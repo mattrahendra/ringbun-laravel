@@ -66,8 +66,9 @@
                             <i class="fas fa-heart mr-1"></i>Popular
                         </div>
                         @elseif($product->created_at->diffInDays() <= 7)
-                            <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                            <i class="fas fa-star mr-1"></i>Baru
+                            <div class="absolute top-4 right-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            <!-- <i class="fas fa-star mr-1"></i> -->
+                            New
                     </div>
                     @endif
                 </div>
@@ -87,61 +88,86 @@
 
     <!-- Modal Pop-ups -->
     @foreach($products as $product)
-    <div id="modal-{{ $product->id }}" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full mx-4">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-semibold text-gray-800">{{ $product->name }}</h3>
-                <button class="close-modal text-gray-600 hover:text-gray-800 text-2xl">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="relative overflow-hidden">
-                <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/300x200/png' }}" alt="{{ $product->name }}" class="w-full h-64 object-cover rounded-lg mb-4">
-                @if($product->stock > 50)
-                <div class="absolute top-4 right-4 bg-yellow-400 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    <i class="fas fa-heart mr-1"></i>Popular
+    <div id="modal-{{ $product->id }}" class="modal fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 modal-content">
+
+            <!-- Modal Header -->
+            <div class="relative">
+                <div class="absolute top-4 right-4 z-10">
+                    <button class="close-modal w-10 h-10 bg-white/90 backdrop-blur-sm hover:bg-white text-gray-600 hover:text-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
                 </div>
-                @elseif($product->created_at->diffInDays() <= 7)
-                    <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    <i class="fas fa-star mr-1"></i>Baru
-            </div>
-            @endif
-        </div>
-        <p class="text-gray-600 text-lg mb-4">{{ $product->description ?? 'Tidak ada deskripsi.' }}</p>
-        <p class="text-yellow-400 font-semibold text-lg mb-4">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-        <p class="text-gray-600 text-lg mb-4">Stok: {{ $product->stock }}</p>
-        <p class="text-gray-600 text-lg mb-4">Status: {{ $product->status == 'available' ? 'Tersedia' : 'Tidak Tersedia' }}</p>
 
-        <!-- Quantity Selector -->
-        <div class="flex items-center gap-4 mb-4">
-            <span class="text-gray-700 font-semibold">Jumlah:</span>
-            <div class="flex items-center gap-2">
-                <button class="quantity-btn w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center" onclick="changeQuantity('modal-{{ $product->id }}', -1)">
-                    <i class="fas fa-minus text-xs"></i>
-                </button>
-                <span class="quantity-display px-3 py-1 bg-gray-100 rounded-lg font-semibold min-w-[3rem] text-center">1</span>
-                <button class="quantity-btn w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center" onclick="changeQuantity('modal-{{ $product->id }}', 1)">
-                    <i class="fas fa-plus text-xs"></i>
-                </button>
+                <!-- Product Image -->
+                <div class="relative overflow-hidden h-64">
+                    <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/600x400/png' }}"
+                        alt="{{ $product->name }}"
+                        class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+
+                    <!-- Product Badge -->
+                    @if($product->stock > 50)
+                    <div class="absolute top-4 left-4 bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                        <i class="fas fa-heart mr-1"></i>Popular
+                    </div>
+                    @elseif($product->created_at->diffInDays() <= 7)
+                        <div class="absolute top-4 left-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                        <i class="fas fa-star mr-1"></i>Baru
+                </div>
+                @endif
             </div>
         </div>
 
-        @if($product->status == 'available' && $product->stock > 0)
-        <button class="add-to-cart-btn bg-yellow-400 text-white px-6 py-3 rounded-lg hover:bg-yellow-500 font-semibold transition-all duration-300 w-full"
+        <!-- Modal Body -->
+        <div class="p-6">
+            <!-- Product Title & Price -->
+            <div class="mb-4">
+                <h3 class="text-2xl font-bold text-brown mb-2">{{ $product->name }}</h3>
+                <span class="text-2xl font-bold text-golden">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+            </div>
+
+            <!-- Product Description -->
+            <div class="mb-6">
+                <p class="text-gray-600 leading-relaxed">
+                    {{ $product->description ?? 'Nikmati kelezatan roti premium dengan cita rasa autentik yang dipanggang fresh setiap hari.' }}
+                </p>
+            </div>
+
+            <!-- Quantity Selector -->
+            <div class="flex items-center justify-between mb-6 p-4 bg-cream/30 rounded-2xl">
+                <span class="text-brown font-bold">Jumlah:</span>
+                <div class="flex items-center gap-3">
+                    <button class="quantity-btn w-10 h-10 bg-golden hover:bg-yellow-500 text-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
+                        onclick="changeQuantity('modal-{{ $product->id }}', -1)">
+                        <i class="fas fa-minus text-sm"></i>
+                    </button>
+                    <span class="quantity-display px-4 py-2 bg-white rounded-full font-bold text-brown text-lg min-w-[3rem] text-center border-2 border-cream shadow-inner">1</span>
+                    <button class="quantity-btn w-10 h-10 bg-golden hover:bg-yellow-500 text-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
+                        onclick="changeQuantity('modal-{{ $product->id }}', 1)">
+                        <i class="fas fa-plus text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            @if($product->status == 'available' && $product->stock > 0)
+            <button class="add-to-cart-btn w-full bg-golden hover:bg-yellow-500 text-white px-6 py-3 rounded-full font-bold text-lg transition-all duration-300 hover:transform hover:scale-105 shadow-lg"
                 data-product-id="{{ $product->id }}"
                 data-product-name="{{ $product->name }}"
                 data-product-price="{{ $product->price }}"
-                data-product-image="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/300x200/png' }}"
+                data-product-image="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/600x400/png' }}"
                 data-product-category="{{ $product->category->name ?? 'Uncategorized' }}">
-            <i class="fas fa-shopping-cart mr-2"></i>
-            Tambah ke Keranjang
-        </button>
-        @else
-        <button class="bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold w-full cursor-not-allowed" disabled>
-            <i class="fas fa-times mr-2"></i>
-            Stok Habis
-        </button>
-        @endif
+                <i class="fas fa-shopping-cart mr-2"></i>
+                Tambah ke Keranjang
+            </button>
+            @else
+            <button class="w-full bg-gray-400 text-white px-6 py-3 rounded-full font-bold text-lg cursor-not-allowed opacity-50" disabled>
+                <i class="fas fa-times mr-2"></i>
+                Stok Habis
+            </button>
+            @endif
+        </div>
     </div>
     </div>
     @endforeach
@@ -159,10 +185,65 @@
 
     <!-- Footer -->
     @include('components.footer')
+    <style>
+        /* Modal Animation */
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
 
+        /* Floating Animation for Badges */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .modal .floating-badge {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Quantity Button Hover Effects */
+        .quantity-btn:hover {
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+        }
+
+        /* Enhanced backdrop blur */
+        .modal {
+            backdrop-filter: blur(10px);
+        }
+
+        /* Smooth transitions */
+        .modal-content {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Custom scrollbar for modal content */
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #ffed4e;
+        }
+    </style>
     <!-- Cart JavaScript -->
     <script>
-        // Cart functionality
         class ProductPageCart {
             constructor() {
                 this.cart = this.getCart();
@@ -181,14 +262,11 @@
             }
 
             addToCart(productData, quantity = 1) {
-                // Check if product already exists in cart
                 const existingItemIndex = this.cart.findIndex(item => item.id == productData.id);
 
                 if (existingItemIndex !== -1) {
-                    // Update quantity if product exists
                     this.cart[existingItemIndex].quantity += quantity;
                 } else {
-                    // Add new product to cart
                     this.cart.push({
                         id: parseInt(productData.id),
                         name: productData.name,
@@ -221,41 +299,15 @@
             }
 
             initializeEventListeners() {
-                // Modal functionality
                 document.querySelectorAll('.product-item').forEach(item => {
                     item.addEventListener('click', (e) => {
-                        // Don't open modal if clicking on add to cart button
                         if (e.target.closest('.add-to-cart-btn')) return;
 
                         const modalId = item.getAttribute('data-modal');
-                        const modal = document.getElementById(modalId);
-                        if (modal) {
-                            modal.classList.remove('hidden');
-                            document.body.style.overflow = 'hidden';
-                        }
+                        window.showModal(modalId);
                     });
                 });
 
-                // Close modal functionality
-                document.querySelectorAll('.close-modal').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const modal = btn.closest('.modal');
-                        modal.classList.add('hidden');
-                        document.body.style.overflow = 'auto';
-                    });
-                });
-
-                // Close modal when clicking outside
-                document.querySelectorAll('.modal').forEach(modal => {
-                    modal.addEventListener('click', (e) => {
-                        if (e.target === modal) {
-                            modal.classList.add('hidden');
-                            document.body.style.overflow = 'auto';
-                        }
-                    });
-                });
-
-                // Add to cart functionality
                 document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         e.preventDefault();
@@ -273,23 +325,17 @@
                         };
 
                         this.addToCart(productData, quantity);
-
-                        // Close modal after adding to cart
-                        modal.classList.add('hidden');
-                        document.body.style.overflow = 'auto';
+                        window.closeModal(modal.id);
                     });
                 });
 
-                // Category tabs functionality
                 document.querySelectorAll('.category-tab').forEach(tab => {
                     tab.addEventListener('click', () => {
-                        // Remove active class from all tabs
                         document.querySelectorAll('.category-tab').forEach(t => {
                             t.classList.remove('bg-yellow-400', 'text-white');
                             t.classList.add('text-gray-800');
                         });
 
-                        // Add active class to clicked tab
                         tab.classList.add('bg-yellow-400', 'text-white');
                         tab.classList.remove('text-gray-800');
 
@@ -298,7 +344,6 @@
                     });
                 });
 
-                // Set first tab as active by default
                 const firstTab = document.querySelector('.category-tab');
                 if (firstTab) {
                     firstTab.classList.add('bg-yellow-400', 'text-white');
@@ -308,7 +353,6 @@
 
             filterByCategory(category) {
                 const products = document.querySelectorAll('.product-item');
-
                 products.forEach(product => {
                     if (category === 'all' || product.classList.contains(category)) {
                         product.classList.remove('hidden');
@@ -319,23 +363,81 @@
             }
         }
 
-        // Quantity change function
-        function changeQuantity(modalId, change) {
-            const modal = document.getElementById(modalId);
-            const quantityDisplay = modal.querySelector('.quantity-display');
-            let currentQuantity = parseInt(quantityDisplay.textContent);
-
-            currentQuantity += change;
-            if (currentQuantity < 1) currentQuantity = 1;
-            if (currentQuantity > 99) currentQuantity = 99; // Maximum quantity limit
-
-            quantityDisplay.textContent = currentQuantity;
-        }
-
-        // Initialize when page loads
-        let productCart;
+        // ✅ Enhanced modal & global interaction
         document.addEventListener('DOMContentLoaded', function() {
-            productCart = new ProductPageCart();
+            window.showModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    setTimeout(() => modal.classList.add('show'), 10);
+                    document.body.style.overflow = 'hidden';
+                }
+            };
+
+            window.closeModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.remove('show');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        document.body.style.overflow = 'auto';
+                    }, 300);
+                }
+            };
+
+            // Outside click to close modal
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) closeModal(this.id);
+                });
+            });
+
+            // Close modal button
+            document.querySelectorAll('.close-modal').forEach(button => {
+                button.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    if (modal) closeModal(modal.id);
+                });
+            });
+
+            // Global change quantity
+            window.changeQuantity = function(modalId, change) {
+                const modal = document.getElementById(modalId);
+                const quantityDisplay = modal.querySelector('.quantity-display');
+                let currentQuantity = parseInt(quantityDisplay.textContent);
+                let newQuantity = Math.max(1, Math.min(99, currentQuantity + change));
+
+                quantityDisplay.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    quantityDisplay.textContent = newQuantity;
+                    quantityDisplay.style.transform = 'scale(1)';
+                }, 150);
+            };
+
+            // Button feedback animation
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menambahkan...';
+                    this.disabled = true;
+
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-check mr-2"></i>Berhasil Ditambahkan!';
+                        this.classList.remove('bg-golden', 'hover:bg-yellow-500');
+                        this.classList.add('bg-green-500');
+
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                            this.classList.remove('bg-green-500');
+                            this.classList.add('bg-golden', 'hover:bg-yellow-500');
+                        }, 2000);
+                    }, 1000);
+                });
+            });
+
+            // Inisialisasi cart
+            window.productCart = new ProductPageCart();
         });
     </script>
 </body>

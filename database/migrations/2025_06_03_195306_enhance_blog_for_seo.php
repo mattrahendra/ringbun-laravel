@@ -11,20 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blogs', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('slug')->nullable()->after('title');
+        Schema::table('blogs', function (Blueprint $table) {
             $table->string('meta_title')->nullable()->after('slug');
             $table->text('meta_description')->nullable()->after('meta_title');
             $table->string('meta_keywords')->nullable()->after('meta_description');
-            $table->text('content');
-            $table->string('image')->nullable();
-            $table->dateTime('published_at')->nullable();
             $table->string('thumbnail')->nullable()->after('published_at');
             $table->string('canonical_url')->nullable()->after('thumbnail');
-            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
-            $table->timestamps();
         });
     }
 
@@ -33,6 +25,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blogs');
+        Schema::table('blogs', function (Blueprint $table) {
+            //
+        });
     }
 };
