@@ -183,7 +183,7 @@
     </section>
 
     <!-- Success Notification -->
-    <div id="success-notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+    <div id="success-notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[calc(100%+2rem)] transition-transform duration-300 z-50">
         <div class="flex items-center gap-2">
             <i class="fas fa-check-circle"></i>
             <span id="notification-message">Produk berhasil ditambahkan ke keranjang!</span>
@@ -466,10 +466,12 @@
                 const notification = document.getElementById('success-notification');
                 const messageSpan = document.getElementById('notification-message');
                 messageSpan.textContent = message;
-                notification.classList.remove('translate-x-full');
+
+                notification.classList.remove('translate-x-[calc(100%+2rem)]');
+                notification.classList.remove('translate-x-0');
 
                 setTimeout(() => {
-                    notification.classList.add('translate-x-full');
+                    notification.classList.add('translate-x-[calc(100%+2rem)]');
                 }, 3000);
             }
 

@@ -62,15 +62,20 @@
                         <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/300x200/png' }}"
                             alt="{{ $product->name }}"
                             class="w-full h-64 object-cover rounded-t-lg group-hover:scale-110 transition-transform duration-500">
-                        @if($product->stock > 50)
-                        <div class="absolute top-4 right-4 bg-yellow-400 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                            <i class="fas fa-heart mr-1"></i>Popular
-                        </div>
-                        @elseif($product->created_at->diffInDays() <= 7)
-                            <div class="absolute top-4 right-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold">
-                            <!-- <i class="fas fa-star mr-1"></i> -->
-                            New
+                        <!-- Product Badge -->
+                    @if($product->stock > 50)
+                    <div class="absolute top-4 left-4 bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                        <i class="fas fa-heart mr-1"></i>Popular
                     </div>
+                    @elseif($product->stock < 10)
+                        <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                            <i class="fas fa-fire mr-1"></i>Trend
+                        </div>
+                    @elseif($product->created_at->diffInDays() <= 7)
+                        <div class="absolute top-4 left-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                        <!-- <i class="fas fa-star mr-1"></i> -->
+                        Baru
+                        </div>
                     @endif
                 </div>
                 <div class="p-4 text-left">
@@ -112,10 +117,15 @@
                     <div class="absolute top-4 left-4 bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
                         <i class="fas fa-heart mr-1"></i>Popular
                     </div>
+                    @elseif($product->stock < 10)
+                        <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                            <i class="fas fa-fire mr-1"></i>Trend
+                        </div>
                     @elseif($product->created_at->diffInDays() <= 7)
                         <div class="absolute top-4 left-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                        <i class="fas fa-star mr-1"></i>Baru
-                </div>
+                        <!-- <i class="fas fa-star mr-1"></i> -->
+                        Baru
+                        </div>
                 @endif
             </div>
         </div>
@@ -174,7 +184,7 @@
     @endforeach
 
     <!-- Success Notification -->
-    <div id="success-notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+    <div id="success-notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[calc(100%+2rem)] transition-transform duration-300 z-50">
         <div class="flex items-center gap-2">
             <i class="fas fa-check-circle"></i>
             <span>Produk berhasil ditambahkan ke keranjang!</span>
@@ -282,12 +292,16 @@
                 this.showSuccessNotification();
             }
 
-            showSuccessNotification() {
+            showSuccessNotification(message) {
                 const notification = document.getElementById('success-notification');
-                notification.classList.remove('translate-x-full');
+                const messageSpan = document.getElementById('notification-message');
+                messageSpan.textContent = message;
+
+                notification.classList.remove('translate-x-[calc(100%+2rem)]');
+                notification.classList.remove('translate-x-0');
 
                 setTimeout(() => {
-                    notification.classList.add('translate-x-full');
+                    notification.classList.add('translate-x-[calc(100%+2rem)]');
                 }, 3000);
             }
 
