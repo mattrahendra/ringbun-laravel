@@ -3,7 +3,7 @@
     <!-- Logo + Menu Links -->
     <div class="flex items-center space-x-8">
         <!-- Logo -->
-        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') }} text-xl font-bold text-yellow-400 flex items-center">
+        <a href="{{ route('home') }}" class="text-xl font-bold text-yellow-400 flex items-center">
             <img src="/images/logo/logo.svg" alt="Ring Bun Logo" class="h-10 mr-2 inline-block">
         </a>
         <!-- Menu Links -->
@@ -17,26 +17,26 @@
     </div>
 
     <!-- Icons -->
-    <div class="flex space-x-4 items-center pr-2">
+    <div class="flex items-center pr-2 gap-2">
         <!-- Search Button (Default State) -->
-        <button class="text-gray-800 hover:text-yellow-300 text-xl transition-all duration-300" id="search-btn">
+        <button class="text-gray-800 hover:text-yellow-300 text-xl transition-colors duration-300 {{ request()->has('q') ? 'hidden' : '' }}" id="search-btn" aria-label="Open search form">
             <i class="fas fa-search"></i>
         </button>
 
-        <!-- Search Form (Hidden by default) -->
-        <form action="{{ route('product')}}" methode="GET" class="hidden md:flex items-center bg-gray-50 rounded-lg px-3 py-2 transition-all duration-300" id="search-form">
+        <!-- Search Form (Visible in all screen sizes) -->
+        <form action="{{ route('product')}}" method="GET" class="flex items-center bg-gray-50 rounded-lg px-3 py-2 transition-all duration-300 {{ request()->has('q') ? 'flex' : 'hidden' }}" id="search-form">
             <input
                 type="text"
                 name='q'
                 placeholder="Search..."
-                class="bg-transparent border-none outline-none text-gray-800 placeholder-gray-500 text-sm w-48 lg:w-64"
+                class="bg-transparent border-none outline-none text-gray-800 placeholder-gray-500 text-sm w-32 sm:w-48 lg:w-64"
                 id="search-input"
-                value="{{ request()->query('q') }}"
+                value="{{ request()->query('q')}}"
             >
-            <button class="text-gray-600 hover:text-yellow-400 ml-2 transition-colors" id="search-submit">
+            <button type="submit" class="text-gray-600 hover:text-yellow-400 ml-2 transition-colors" id="search-submit" aria-label="Submit search">
                 <i class="fas fa-search text-sm"></i>
             </button>
-            <button class="text-gray-600 hover:text-red-500 ml-2 transition-colors" id="close-search">
+            <button type="button" class="text-gray-600 hover:text-red-500 ml-2 transition-colors" id="close-search" aria-label="Close search form">
                 <i class="fas fa-times text-sm"></i>
             </button>
         </form>
@@ -49,38 +49,18 @@
 
         <!-- Mobile Menu Button -->
         <div class="md:hidden">
-            <button class="text-gray-800 hover:text-yellow-300 text-2xl" id="mobile-menu-btn">
+            <button class="text-gray-800 hover:text-yellow-300 text-2xl" id="mobile-menu-btn" aria-label="Toggle mobile menu">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
     </div>
 </nav>
 
-<!-- Mobile Search Bar (for mobile devices) -->
-<div class="fixed md:hidden top-16 left-0 w-full bg-white z-40 px-6 py-3 shadow-md transform -translate-y-full transition-transform duration-300 ease-in-out" id="mobile-search-bar">
-    <form class="flex items-center bg-gray-50 rounded-lg px-3 py-2">
-        <input
-            type="text"
-            name="q"
-            placeholder="Search products..."
-            class="bg-transparent border-none outline-none text-gray-800 placeholder-gray-500 flex-1"
-            value="{{ request()->query('q') }}"
-            id="mobile-search-input"
-        >
-        <button class="text-gray-600 hover:text-yellow-400 ml-2 transition-colors" id="mobile-search-submit">
-            <i class="fas fa-search"></i>
-        </button>
-        <button class="text-gray-600 hover:text-red-500 ml-2 transition-colors" id="close-mobile-search">
-            <i class="fas fa-times"></i>
-        </button>
-    </form>
-</div>
-
 <!-- Mobile Menu -->
-<div class="fixed md:hidden bg-white text-gray-800 p-4 space-y-2 hidden top-16 left-0 w-full z-40" id="mobile-menu">
-    <a href="{{ route('home') }}" class="{{ request()->routeIs('home') }} block hover:text-yellow-300">Home</a>
-    <a href="{{ route('product') }}" class="{{ request()->routeIs('product') }} block hover:text-yellow-300">Product</a>
-    <a href="{{ route('about') }}" class="{{ request()->routeIs('about') }} block hover:text-yellow-300">About</a>
-    <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog') }} block hover:text-yellow-300">Blog</a>
-    <a href="{{ route('b2b') }}" class="{{ request()->routeIs('b2b') }} block hover:text-yellow-300">B2B</a>
+<div class="fixed md:hidden bg-white text-gray-800 p-4 space-y-2 hidden top-16 left-0 w-full z-40 shadow-md" id="mobile-menu">
+    <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-yellow-400 font-semibold' : 'text-gray-800' }} block hover:text-yellow-300 py-2">Home</a>
+    <a href="{{ route('product') }}" class="{{ request()->routeIs('product') ? 'text-yellow-400 font-semibold' : 'text-gray-800' }} block hover:text-yellow-300 py-2">Product</a>
+    <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'text-yellow-400 font-semibold' : 'text-gray-800' }} block hover:text-yellow-300 py-2">About</a>
+    <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog') ? 'text-yellow-400 font-semibold' : 'text-gray-800' }} block hover:text-yellow-300 py-2">Blog</a>
+    <a href="{{ route('b2b') }}" class="{{ request()->routeIs('b2b') ? 'text-yellow-400 font-semibold' : 'text-gray-800' }} block hover:text-yellow-300 py-2">B2B</a>
 </div>

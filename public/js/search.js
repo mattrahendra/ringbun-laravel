@@ -1,67 +1,107 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const searchBtn = document.getElementById("search-btn");
-    const searchForm = document.getElementById("search-form");
-    const searchInput = document.getElementById("search-input");
-    const closeSearch = document.getElementById("close-search");
-    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-    const mobileMenu = document.getElementById("mobile-menu");
-    const mobileSearchBar = document.getElementById("mobile-search-bar");
-    const mobileSearchInput = document.getElementById("mobile-search-input");
-    const closeMobileSearch = document.getElementById("close-mobile-search");
+    const elements = {
+        searchBtn: document.getElementById("search-btn"),
+        searchForm: document.getElementById("search-form"),
+        searchInput: document.getElementById("search-input"),
+        closeSearch: document.getElementById("close-search"),
+        mobileMenuBtn: document.getElementById("mobile-menu-btn"),
+        mobileMenu: document.getElementById("mobile-menu"),
+    };
 
-    // SATU event listener untuk search button - menangani desktop dan mobile
-    searchBtn.addEventListener("click", function () {
-        if (window.innerWidth >= 768) {
-            // Mode Desktop
-            searchForm.classList.toggle("hidden");
-            searchBtn.classList.toggle("hidden");
-            if (searchInput.value) {
-                searchForm.classList.remove("hidden");
-                searchBtn.classList.add("hidden");
-            }
-            searchInput.focus();
+    // Track apakah form sedang terbuka
+    let isFormOpen = false;
+
+    // Fungsi untuk toggle search form
+    function toggleSearchForm(showForm) {
+        elements.searchForm.classList.toggle("hidden", !showForm);
+        elements.searchBtn.classList.toggle("hidden", showForm);
+        isFormOpen = showForm;
+        if (showForm) elements.searchInput.focus();
+    }
+
+    // Cek apakah ada parameter 'q' di URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasQuery = urlParams.has('q') && urlParams.get('q').trim() !== "";
+
+    // State awal berdasarkan parameter 'q'
+    if (elements.searchForm && elements.searchBtn) {
+        if (hasQuery) {
+            toggleSearchForm(true);
         } else {
-            // Mode Mobile
-            mobileSearchBar.classList.toggle("-translate-y-full");
-            if (mobileSearchInput.value) {
-                mobileSearchBar.classList.remove("-translate-y-full");
-            }
-            mobileSearchInput.focus();
-            mobileMenu.classList.add("hidden");
+            toggleSearchForm(false);
         }
-    });
+    }
 
-    // Close search form on desktop
-    closeSearch.addEventListener("click", function (e) {
-        e.preventDefault();
-        searchInput.value = '';
-        window.location.href = '/product';
-    });
+    // Klik tombol search
+    if (elements.searchBtn) {
+        elements.searchBtn.addEventListener("click", () => {
+            toggleSearchForm(true);
+        });
+    }
+
+    // Tutup form
+    if (elements.closeSearch) {
+        elements.closeSearch.addEventListener("click", (e) => {
+            e.preventDefault();
+            elements.searchInput.value = "";
+            toggleSearchForm(false);
+            elements.searchBtn.focus();
+            // Refresh hanya jika ada parameter 'q' di URL
+            if (hasQuery) {
+                const url = new URL(window.location);
+                url.searchParams.delete('q');
+                window.location.assign(url);
+            }
+        });
+    }
 
     // Toggle mobile menu
-    mobileMenuBtn.addEventListener("click", function () {
-        mobileMenu.classList.toggle("hidden");
-        mobileSearchBar.classList.add("-translate-y-full");
-    });
+    if (elements.mobileMenuBtn) {
+        elements.mobileMenuBtn.addEventListener("click", () => {
+            elements.mobileMenu.classList.toggle("hidden");
+        });
+    }
 
-    // Close mobile search bar
-    closeMobileSearch.addEventListener("click", function (e) {
-        e.preventDefault();
-        mobileSearchInput.value = '';
-        window.location.href = '/product';
-    });
+    // Track apakah input sedang fokus
+    let isInputFocused = false;
+    if (elements.searchInput) {
+        elements.searchInput.addEventListener("focus", () => {
+            isInputFocused = true;
+        });
+        elements.searchInput.addEventListener("blur", () => {
+            isInputFocused = false;
+        });
+    }
 
-    // Show form if input has value on page load - pisahkan berdasarkan ukuran layar
-    if (window.innerWidth >= 768) {
-        // Desktop: tampilkan form desktop jika ada value
-        if (searchInput.value) {
-            searchForm.classList.remove("hidden");
-            searchBtn.classList.add("hidden");
+    // Handle resize dengan debounce
+    function debounce(fn, ms) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn.apply(this, args), ms);
+        };
+    }
+
+    window.addEventListener("resize", debounce(() => {
+        // Jangan ubah state form jika input sedang fokus (keyboard muncul)
+        if (isInputFocused) {
+            return;
         }
-    } else {
-        // Mobile: tampilkan mobile search bar jika ada value
-        if (mobileSearchInput.value) {
-            mobileSearchBar.classList.remove("-translate-y-full");
+        // Hanya ubah state form jika benar-benar diperlukan
+        if (hasQuery && elements.searchInput.value.trim() !== "") {
+            toggleSearchForm(true);
+        } else if (!isFormOpen) {
+            toggleSearchForm(false);
         }
+    }, 100));
+
+    // Validasi form agar tidak submit kosong
+    if (elements.searchForm) {
+        elements.searchForm.addEventListener("submit", (e) => {
+            if (elements.searchInput.value.trim() === "") {
+                e.preventDefault();
+                elements.searchInput.focus();
+            }
+        });
     }
 });

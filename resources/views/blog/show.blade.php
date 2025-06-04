@@ -6,6 +6,7 @@
     <title>Ring Bun - {{ $blog->title }}</title>
     <meta name="description" content="{{ Str::limit(strip_tags($blog->content), 160) }}">
     <meta name="keywords" content="Ring Bun Blog, {{ $blog->title }}, Bakery, Artikel">
+    <script src="{{ asset('/js/blog/blog.js') }}" defer></script>
 </head>
 
 <body class="bg-cream">

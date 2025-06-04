@@ -6,6 +6,7 @@
     <title>Ring Bun - B2B Partnership</title>
     <meta name="description" content="Bergabung dengan Ring Bun sebagai mitra bisnis. Dapatkan penawaran khusus untuk restoran, cafe, dan bisnis kuliner Anda.">
     <meta name="keywords" content="Ring Bun B2B, Partnership, Mitra Bisnis, Supplier Roti, Wholesale Bakery">
+    <script src="{{ asset('/js/b2b/b2b.js') }}"></script>
 </head>
 
 <body class="bg-cream">

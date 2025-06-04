@@ -4,6 +4,8 @@
 <head>
     @include('components.head')
     <title>Ring Bun - Home</title>
+    <script src="{{ asset('/js/home.js') }}" defer></script>
+    <script src="{{ asset('/js/carousel.js') }}" defer></script>
 </head>
 
 <body class="bg-cream">

@@ -4,6 +4,7 @@
 <head>
     @include('components.head')
     <title>Ring Bun - Produk</title>
+    <script src="{{ asset('/js/product/category.js') }}"></script>
 </head>
 
 <body class="bg-cream">

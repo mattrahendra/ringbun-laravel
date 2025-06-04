@@ -5,6 +5,7 @@
     @include('components.head')
     <title>Ring Bun - Keranjang Belanja</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="{{ asset('/js/product/cart-manager.js') }}"></script>
 </head>
 
 <body class="bg-cream">

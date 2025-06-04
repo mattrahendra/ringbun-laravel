@@ -6,6 +6,7 @@
     <title>Ring Bun - Blog</title>
     <meta name="description" content="Baca artikel terbaru dari Ring Bun Bakery tentang tips baking, resep, dan cerita menarik seputar dunia roti dan kue.">
     <meta name="keywords" content="Blog Ring Bun, Tips Baking, Resep Roti, Artikel Bakery, Cerita Ring Bun">
+    <script src="{{ asset('/js/blog/blog.js') }}" defer></script>
 </head>
 
 <body class="bg-cream">
