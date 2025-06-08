@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->enum('type', ['Food', 'Drink', 'Other'])->default('Food');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

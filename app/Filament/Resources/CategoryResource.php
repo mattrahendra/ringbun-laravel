@@ -35,6 +35,10 @@ class CategoryResource extends Resource
                         'Other' => 'Other',
                     ])
                     ->required(),
+                Forms\Components\Textarea::make('description') // <- tambahkan ini
+                ->maxLength(255)
+                ->label('Deskripsi')
+                ->rows(3),
             ]);
     }
 
@@ -48,6 +52,10 @@ class CategoryResource extends Resource
             Tables\Columns\TextColumn::make('type')
                 ->label('Jenis Kategori')
                 ->sortable(),
+            Tables\Columns\TextColumn::make('description') // <- tambahkan ini
+                ->limit(50)
+                ->wrap()
+                ->label('Deskripsi'),
             ])
             ->filters([
                 //
