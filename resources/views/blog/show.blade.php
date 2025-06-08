@@ -7,6 +7,12 @@
     <meta name="description" content="{{ Str::limit(strip_tags($blog->content), 160) }}">
     <meta name="keywords" content="Ring Bun Blog, {{ $blog->title }}, Bakery, Artikel">
     <script src="{{ asset('/js/blog/blog.js') }}" defer></script>
+    <script>
+    window.blogData = {
+        title: "{{ addslashes($blog->title) }}",
+        url: "{{ url()->current() }}"
+    };
+</script>
 </head>
 
 <body class="bg-cream">
@@ -123,114 +129,69 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- You can add related articles here if needed -->
-                <div class="bg-white rounded-3xl shadow-xl overflow-hidden card-hover">
+                @forelse($article as $blog)
+                <article class="bg-white rounded-3xl shadow-xl overflow-hidden card-hover">
                     <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                            alt="Tips Baking"
+                        <img src="{{ $blog->image ? asset('storage/' . $blog->image) : 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' }}"
+                            alt="{{ $blog->title }}"
                             class="w-full h-48 object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                         <div class="absolute bottom-3 left-3">
                             <span class="bg-white/90 text-brown px-3 py-1 rounded-full text-xs font-bold">
-                                Jan 15
+                                {{ $blog->published_at->format('M d') }}
                             </span>
                         </div>
                     </div>
                     <div class="p-6">
                         <div class="flex items-center gap-2 mb-3">
                             <div class="w-2 h-2 bg-golden rounded-full"></div>
-                            <span class="text-gray-500 text-xs font-medium uppercase tracking-wide">TIPS</span>
+                            <span class="text-gray-500 text-xs font-medium uppercase tracking-wide">ARTIKEL</span>
                         </div>
                         <h3 class="text-xl font-bold text-brown mb-3 leading-tight line-clamp-2">
-                            Tips Membuat Roti yang Sempurna
+                            {{ $blog->title }}
                         </h3>
                         <p class="text-gray-600 mb-4 leading-relaxed line-clamp-3">
-                            Rahasia membuat roti yang lembut dan mengembang sempurna dari dapur Ring Bun.
+                            {{ Str::limit(strip_tags($blog->content), 100) }}
                         </p>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2 text-gray-500 text-sm">
                                 <i class="fas fa-clock text-golden"></i>
-                                <span>3 min read</span>
+                                <span>{{ ceil(str_word_count(strip_tags($blog->content)) / 200) }} min read</span>
                             </div>
-                            <a href="#" class="inline-flex items-center gap-2 text-golden font-bold hover:text-brown transition-colors">
+                            <a href="{{ route('blog.show', $blog->slug) }}"
+                                class="inline-flex items-center gap-2 text-golden font-bold hover:text-brown transition-colors">
                                 Baca
                                 <i class="fas fa-arrow-right text-sm"></i>
                             </a>
                         </div>
                     </div>
-                </div>
-
-                <div class="bg-white rounded-3xl shadow-xl overflow-hidden card-hover">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                            alt="Resep Eksklusif"
-                            class="w-full h-48 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                        <div class="absolute bottom-3 left-3">
-                            <span class="bg-white/90 text-brown px-3 py-1 rounded-full text-xs font-bold">
-                                Jan 10
-                            </span>
+                </article>
+                @empty
+                <!-- Empty State -->
+                <div class="col-span-full">
+                    <div class="bg-white rounded-3xl p-16 text-center shadow-xl">
+                        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-newspaper text-4xl text-gray-400"></i>
                         </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="w-2 h-2 bg-golden rounded-full"></div>
-                            <span class="text-gray-500 text-xs font-medium uppercase tracking-wide">RESEP</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-brown mb-3 leading-tight line-clamp-2">
-                            Resep Rahasia Ring Bun Signature
-                        </h3>
-                        <p class="text-gray-600 mb-4 leading-relaxed line-clamp-3">
-                            Untuk pertama kalinya, kami bagikan resep rahasia Ring Bun yang sudah menjadi favorit.
+                        <h3 class="text-2xl font-bold text-brown mb-4">Belum Ada Artikel</h3>
+                        <p class="text-gray-600 text-lg mb-8 max-w-md mx-auto">
+                            Kami sedang menyiapkan artikel-artikel menarik untuk Anda. Tetap ikuti updates dari Ring Bun!
                         </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2 text-gray-500 text-sm">
-                                <i class="fas fa-clock text-golden"></i>
-                                <span>5 min read</span>
-                            </div>
-                            <a href="#" class="inline-flex items-center gap-2 text-golden font-bold hover:text-brown transition-colors">
-                                Baca
-                                <i class="fas fa-arrow-right text-sm"></i>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="{{ route('product') }}"
+                                class="bg-golden text-white px-6 py-3 rounded-full font-bold btn-primary inline-flex items-center justify-center gap-2">
+                                <i class="fas fa-shopping-bag"></i>
+                                Lihat Produk
+                            </a>
+                            <a href="https://www.instagram.com/ringbunbakery/"
+                                class="border-2 border-golden text-golden px-6 py-3 rounded-full font-bold hover:bg-golden hover:text-white transition-all duration-300 inline-flex items-center justify-center gap-2">
+                                <i class="fab fa-instagram"></i>
+                                Follow Instagram
                             </a>
                         </div>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-3xl shadow-xl overflow-hidden card-hover">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1517433456452-f9633a875f6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                            alt="Behind the Scenes"
-                            class="w-full h-48 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                        <div class="absolute bottom-3 left-3">
-                            <span class="bg-white/90 text-brown px-3 py-1 rounded-full text-xs font-bold">
-                                Jan 05
-                            </span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="w-2 h-2 bg-golden rounded-full"></div>
-                            <span class="text-gray-500 text-xs font-medium uppercase tracking-wide">LIFESTYLE</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-brown mb-3 leading-tight line-clamp-2">
-                            Behind the Scenes Ring Bun
-                        </h3>
-                        <p class="text-gray-600 mb-4 leading-relaxed line-clamp-3">
-                            Yuk intip proses produksi dan kehangatan tim Ring Bun di balik layar.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2 text-gray-500 text-sm">
-                                <i class="fas fa-clock text-golden"></i>
-                                <span>4 min read</span>
-                            </div>
-                            <a href="#" class="inline-flex items-center gap-2 text-golden font-bold hover:text-brown transition-colors">
-                                Baca
-                                <i class="fas fa-arrow-right text-sm"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
     </section>

@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $blogs = Blog::where('status', 'published')
             ->orderBy('published_at', 'desc')
             ->get();
@@ -15,9 +16,18 @@ class BlogController extends Controller
         return view('blog.index', compact('blogs'));
     }
 
-    public function show($id) {
-        $blog = Blog::where('status', 'published')->findOrFail($id);
+    public function show($slug)
+    {
+        $blog = Blog::where('slug', $slug)
+            ->where('status', 'published')
+            ->firstOrFail();
 
-        return view('blog.show', compact('blog'));
+        $article = Blog::where('id', '!=', $blog->id)
+            ->where('status', 'published')
+            ->latest()
+            ->take(3) // Fetch 3 latest articles excluding the current one
+            ->get();
+
+        return view('blog.show', compact('blog', 'article'));
     }
 }

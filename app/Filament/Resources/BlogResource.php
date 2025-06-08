@@ -24,35 +24,28 @@ class BlogResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255),
+                TextInput::make('title')->required()->maxLength(255),
+                TextInput::make('slug')->required()->maxLength(255),
 
-                // SEO Fields
-                TextInput::make('meta_title')->label('Meta Title'),
+                // SEO
+                TextInput::make('meta_title')->label('Meta Title')->maxLength(255),
                 Textarea::make('meta_description')->label('Meta Description'),
-                TextInput::make('meta_keywords')->label('Meta Keywords'),
+                TextInput::make('meta_keywords')->label('Meta Keywords')->maxLength(255),
 
                 // Content
-                RichEditor::make('content')
-                    ->required(),
+                RichEditor::make('content')->required(),
 
                 // Images
                 FileUpload::make('image')
                     ->image()
                     ->directory('blogs/images'),
+
                 FileUpload::make('thumbnail')
                     ->image()
                     ->directory('blogs/thumbnails'),
 
-                // Dates
-                DateTimePicker::make('published_at'),
-
                 // Canonical URL
-                TextInput::make('canonical_url'),
+                TextInput::make('canonical_url')->label('Canonical URL')->maxLength(255),
 
                 // Status
                 Select::make('status')
@@ -63,6 +56,10 @@ class BlogResource extends Resource
                     ])
                     ->default('draft')
                     ->required(),
+
+                // Publish Date
+                DateTimePicker::make('published_at')
+                    ->label('Published At'),
             ]);
     }
 

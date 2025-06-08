@@ -18,7 +18,7 @@ Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout')
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
-Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::get('/b2b', [B2BController::class, 'index'])->name('b2b');
 

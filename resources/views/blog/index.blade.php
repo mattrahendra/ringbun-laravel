@@ -101,14 +101,14 @@
                                 </div>
                                 <div class="flex items-center gap-2 text-gray-500 text-sm">
                                     <i class="fas fa-clock text-golden"></i>
-                                    <span>5 min read</span>
+                                    <span>{{ ceil(str_word_count(strip_tags($featuredBlog->content)) / 200) }} min read</span>
                                 </div>
                             </div>
                             <h3 class="text-3xl font-bold text-brown mb-4 leading-tight">{{ $featuredBlog->title }}</h3>
                             <p class="text-gray-600 text-lg mb-6 leading-relaxed">
                                 {{ Str::limit(strip_tags($featuredBlog->content), 150) }}
                             </p>
-                            <a href="{{ route('blog.show', $featuredBlog->id) }}"
+                            <a href="{{ route('blog.show', $featuredBlog->slug) }}"
                                 class="inline-flex items-center gap-2 bg-golden text-white px-6 py-3 rounded-full font-bold btn-primary w-fit">
                                 Baca Selengkapnya
                                 <i class="fas fa-arrow-right"></i>
@@ -148,9 +148,9 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2 text-gray-500 text-sm">
                                 <i class="fas fa-clock text-golden"></i>
-                                <span>3 min read</span>
+                                <span>{{ ceil(str_word_count(strip_tags($blog->content)) / 200) }} min read</span>
                             </div>
-                            <a href="{{ route('blog.show', $blog->id) }}"
+                            <a href="{{ route('blog.show', $blog->slug) }}"
                                 class="inline-flex items-center gap-2 text-golden font-bold hover:text-brown transition-colors">
                                 Baca
                                 <i class="fas fa-arrow-right text-sm"></i>
