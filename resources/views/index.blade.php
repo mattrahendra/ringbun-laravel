@@ -191,90 +191,49 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Category 1 -->
+                @foreach($categories as $category)
+                    @php
+                        $products = $category->products;
+                        $totalVarian = $products->count();
+                        $minPrice = $products->min('price');
+                        $firstProduct = $products->first();
+                        $image = $firstProduct?->image;
+                        $stock = $products->sum('stock');
+                        $created_at = $products->min('created_at');
+                    @endphp
                 <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg group">
                     <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1549340418-33643752985e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80"
-                            alt="Sweet Buns"
+                        <img src="{{ $image ? asset('storage/' . $image) : 'https://placehold.co/300x200/png' }}"
+                            alt="{{ $category->name }}"
                             class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute top-4 right-4 bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        @if($stock > 50)
+                        <div class="absolute top-4 left-4 bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
                             <i class="fas fa-heart mr-1"></i>Popular
                         </div>
+                        @elseif($stock < 10)
+                        <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                            <i class="fas fa-fire mr-1"></i>Trend
+                        </div>
+                        @elseif($created_at->diffInDays() <= 7)
+                        <div class="absolute top-4 left-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                        <!-- <i class="fas fa-star mr-1"></i> -->
+                        Baru
+                        </div>
+                        @endif
                     </div>
                     <div class="p-6">
-                        <h3 class="text-2xl font-bold text-brown mb-2">Sweet Buns</h3>
-                        <p class="text-gray-600 mb-4">Roti manis dengan berbagai topping dan isian lezat</p>
+                        <h3 class="text-2xl font-bold text-brown mb-2">{{ $category->name}}</h3>
+                        <p class="text-gray-600 mb-4">{{ $category->description ?? 'Deskripsi belum tersedia' }}</p>
                         <div class="flex justify-between items-center mb-4">
-                            <span class="text-golden font-bold text-lg">Mulai Rp 15.000</span>
-                            <span class="text-sm text-gray-500">12 varian</span>
+                            <span class="text-golden font-bold text-lg">{{ $minPrice ? 'Mulai Rp ' . number_format($minPrice, 0, ',', '.') : 'Belum ada harga' }}</span>
+                            <span class="text-sm text-gray-500">{{ $totalVarian }} varian</span>
                         </div>
                         <button class="w-full bg-golden text-white py-3 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
                             Lihat Produk
                         </button>
                     </div>
                 </div>
-
-                <!-- Category 2 -->
-                <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg group">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                            alt="Savory Buns"
-                            class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-brown mb-2">Savory Buns</h3>
-                        <p class="text-gray-600 mb-4">Roti gurih dengan isian daging dan sayuran segar</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-golden font-bold text-lg">Mulai Rp 18.000</span>
-                            <span class="text-sm text-gray-500">8 varian</span>
-                        </div>
-                        <button class="w-full bg-golden text-white py-3 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
-                            Lihat Produk
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Category 3 -->
-                <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg group">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1465&q=80"
-                            alt="Specialty Buns"
-                            class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute top-4 right-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold">
-                            New
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-brown mb-2">Specialty Buns</h3>
-                        <p class="text-gray-600 mb-4">Kreasi khusus dengan resep signature kami</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-golden font-bold text-lg">Mulai Rp 25.000</span>
-                            <span class="text-sm text-gray-500">6 varian</span>
-                        </div>
-                        <button class="w-full bg-golden text-white py-3 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
-                            Lihat Produk
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Category 4 -->
-                <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg group">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80"
-                            alt="Pastry & Cakes"
-                            class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-brown mb-2">Pastry & Cakes</h3>
-                        <p class="text-gray-600 mb-4">Kue dan pastry premium untuk acara spesial</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-golden font-bold text-lg">Mulai Rp 35.000</span>
-                            <span class="text-sm text-gray-500">15 varian</span>
-                        </div>
-                        <button class="w-full bg-golden text-white py-3 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
-                            Lihat Produk
-                        </button>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
