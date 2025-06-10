@@ -6,6 +6,7 @@
     <title>Ring Bun - Home</title>
     <script src="{{ asset('/js/home.js') }}" defer></script>
     <script src="{{ asset('/js/carousel.js') }}" defer></script>
+    <script src="{{ asset('/js/homenav.js') }}" defer></script>
 </head>
 
 <body class="bg-cream">
@@ -190,51 +191,54 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Category 1 -->
+                <!-- Category Loop -->
                 @foreach($categories as $category)
-                    @php
-                        $products = $category->products;
-                        $totalVarian = $products->count();
-                        $minPrice = $products->min('price');
-                        $firstProduct = $products->first();
-                        $image = $firstProduct?->image;
-                        $stock = $products->sum('stock');
-                        $created_at = $products->min('created_at');
-                    @endphp
+                @php
+                $products = $category->products;
+                $totalVarian = $products->count();
+                $minPrice = $products->min('price');
+                $firstProduct = $products->first();
+                $image = $firstProduct?->image;
+                $stock = $products->sum('stock');
+                $created_at = $products->min('created_at');
+                @endphp
                 <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg group">
                     <div class="relative overflow-hidden">
                         <img src="{{ $image ? asset('storage/' . $image) : 'https://placehold.co/300x200/png' }}"
                             alt="{{ $category->name }}"
                             class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
-                        @if($stock > 50)
+                        @if($stock > 200)
                         <div class="absolute top-4 left-4 bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                            <i class="fas fa-heart mr-1"></i>Popular
+                            <i class="fas fa-heart mr-1"></i>Populer
                         </div>
-                        @elseif($stock < 10)
-                        <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                        @elseif($stock < 50)
+                            <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
                             <i class="fas fa-fire mr-1"></i>Trend
-                        </div>
-                        @elseif($created_at->diffInDays() <= 7)
+                    </div>
+                    @elseif($created_at->diffInDays() <= 7)
                         <div class="absolute top-4 left-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                        <!-- <i class="fas fa-star mr-1"></i> -->
                         Baru
-                        </div>
-                        @endif
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-brown mb-2">{{ $category->name}}</h3>
-                        <p class="text-gray-600 mb-4">{{ $category->description ?? 'Deskripsi belum tersedia' }}</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-golden font-bold text-lg">{{ $minPrice ? 'Mulai Rp ' . number_format($minPrice, 0, ',', '.') : 'Belum ada harga' }}</span>
-                            <span class="text-sm text-gray-500">{{ $totalVarian }} varian</span>
-                        </div>
-                        <button class="w-full bg-golden text-white py-3 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
-                            Lihat Produk
-                        </button>
-                    </div>
                 </div>
-                @endforeach
+                @endif
             </div>
+            <div class="p-6">
+                <h3 class="text-2xl font-bold text-brown mb-2">{{ $category->name}}</h3>
+                <p class="text-gray-600 mb-4">{{ $category->description ?? 'Deskripsi belum tersedia' }}</p>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-golden font-bold text-lg">{{ $minPrice ? 'Mulai Rp ' . number_format($minPrice, 0, ',', '.') : 'Belum ada harga' }}</span>
+                    <span class="text-sm text-gray-500">{{ $totalVarian }} varian</span>
+                </div>
+                <!-- Updated Button dengan data attributes -->
+                <button class="category-product-btn w-full bg-golden text-white py-3 rounded-full font-semibold hover:bg-yellow-500 transition-all duration-300 hover:transform hover:scale-105 shadow-lg"
+                    data-category-id="{{ $category->id }}"
+                    data-category-name="{{ $category->name }}">
+                    <i class="fas fa-eye mr-2"></i>
+                    Lihat Produk
+                </button>
+            </div>
+        </div>
+        @endforeach
+        </div>
         </div>
     </section>
 

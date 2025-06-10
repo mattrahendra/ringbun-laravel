@@ -63,31 +63,31 @@
                             alt="{{ $product->name }}"
                             class="w-full h-64 object-cover rounded-t-lg group-hover:scale-110 transition-transform duration-500">
                         <!-- Product Badge -->
-                    @if($product->stock > 50)
-                    <div class="absolute top-4 left-4 bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                        <i class="fas fa-heart mr-1"></i>Popular
-                    </div>
-                    @elseif($product->stock < 10)
-                        <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                            <i class="fas fa-fire mr-1"></i>Trend
+                        @if($product->stock > 50)
+                        <div class="absolute top-4 left-4 bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                            <i class="fas fa-heart mr-1"></i>Popular
                         </div>
+                        @elseif($product->stock < 10)
+                            <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                            <i class="fas fa-fire mr-1"></i>Trend
+                    </div>
                     @elseif($product->created_at->diffInDays() <= 7)
                         <div class="absolute top-4 left-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
                         <!-- <i class="fas fa-star mr-1"></i> -->
                         Baru
-                        </div>
-                    @endif
                 </div>
-                <div class="p-4 text-left">
-                    <h3 class="text-2xl font-semibold text-brown">{{ $product->name }}</h3>
-                    <p class="text-gray-600 text-sm mb-2">{{ Str::limit($product->description, 50) }}</p>
-                    <p class="text-yellow-400 font-semibold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                </div>
+                @endif
             </div>
-            @endif
-            @empty
-            <p class="text-center text-gray-600 col-span-3">Belum ada produk yang tersedia.</p>
-            @endforelse
+            <div class="p-4 text-left">
+                <h3 class="text-2xl font-semibold text-brown">{{ $product->name }}</h3>
+                <p class="text-gray-600 text-sm mb-2">{{ Str::limit($product->description, 50) }}</p>
+                <p class="text-yellow-400 font-semibold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+            </div>
+        </div>
+        @endif
+        @empty
+        <p class="text-center text-gray-600 col-span-3">Belum ada produk yang tersedia.</p>
+        @endforelse
         </div>
         </div>
     </section>
@@ -119,66 +119,66 @@
                     </div>
                     @elseif($product->stock < 10)
                         <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                            <i class="fas fa-fire mr-1"></i>Trend
-                        </div>
-                    @elseif($product->created_at->diffInDays() <= 7)
-                        <div class="absolute top-4 left-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                        <!-- <i class="fas fa-star mr-1"></i> -->
-                        Baru
-                        </div>
-                @endif
-            </div>
-        </div>
-
-        <!-- Modal Body -->
-        <div class="p-6">
-            <!-- Product Title & Price -->
-            <div class="mb-4">
-                <h3 class="text-2xl font-bold text-brown mb-2">{{ $product->name }}</h3>
-                <span class="text-2xl font-bold text-golden">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-            </div>
-
-            <!-- Product Description -->
-            <div class="mb-6">
-                <p class="text-gray-600 leading-relaxed">
-                    {{ $product->description ?? 'Nikmati kelezatan roti premium dengan cita rasa autentik yang dipanggang fresh setiap hari.' }}
-                </p>
-            </div>
-
-            <!-- Quantity Selector -->
-            <div class="flex items-center justify-between mb-6 p-4 bg-cream/30 rounded-2xl">
-                <span class="text-brown font-bold">Jumlah:</span>
-                <div class="flex items-center gap-3">
-                    <button class="quantity-btn w-10 h-10 bg-golden hover:bg-yellow-500 text-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
-                        onclick="changeQuantity('modal-{{ $product->id }}', -1)">
-                        <i class="fas fa-minus text-sm"></i>
-                    </button>
-                    <span class="quantity-display px-4 py-2 bg-white rounded-full font-bold text-brown text-lg min-w-[3rem] text-center border-2 border-cream shadow-inner">1</span>
-                    <button class="quantity-btn w-10 h-10 bg-golden hover:bg-yellow-500 text-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
-                        onclick="changeQuantity('modal-{{ $product->id }}', 1)">
-                        <i class="fas fa-plus text-sm"></i>
-                    </button>
+                        <i class="fas fa-fire mr-1"></i>Trend
                 </div>
+                @elseif($product->created_at->diffInDays() <= 7)
+                    <div class="absolute top-4 left-4 bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                    <!-- <i class="fas fa-star mr-1"></i> -->
+                    Baru
             </div>
-
-            <!-- Action Button -->
-            @if($product->status == 'available' && $product->stock > 0)
-            <button class="add-to-cart-btn w-full bg-golden hover:bg-yellow-500 text-white px-6 py-3 rounded-full font-bold text-lg transition-all duration-300 hover:transform hover:scale-105 shadow-lg"
-                data-product-id="{{ $product->id }}"
-                data-product-name="{{ $product->name }}"
-                data-product-price="{{ $product->price }}"
-                data-product-image="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/600x400/png' }}"
-                data-product-category="{{ $product->category->name ?? 'Uncategorized' }}">
-                <i class="fas fa-shopping-cart mr-2"></i>
-                Tambah ke Keranjang
-            </button>
-            @else
-            <button class="w-full bg-gray-400 text-white px-6 py-3 rounded-full font-bold text-lg cursor-not-allowed opacity-50" disabled>
-                <i class="fas fa-times mr-2"></i>
-                Stok Habis
-            </button>
             @endif
         </div>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="p-6">
+        <!-- Product Title & Price -->
+        <div class="mb-4">
+            <h3 class="text-2xl font-bold text-brown mb-2">{{ $product->name }}</h3>
+            <span class="text-2xl font-bold text-golden">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+        </div>
+
+        <!-- Product Description -->
+        <div class="mb-6">
+            <p class="text-gray-600 leading-relaxed">
+                {{ $product->description ?? 'Nikmati kelezatan roti premium dengan cita rasa autentik yang dipanggang fresh setiap hari.' }}
+            </p>
+        </div>
+
+        <!-- Quantity Selector -->
+        <div class="flex items-center justify-between mb-6 p-4 bg-cream/30 rounded-2xl">
+            <span class="text-brown font-bold">Jumlah:</span>
+            <div class="flex items-center gap-3">
+                <button class="quantity-btn w-10 h-10 bg-golden hover:bg-yellow-500 text-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
+                    onclick="changeQuantity('modal-{{ $product->id }}', -1)">
+                    <i class="fas fa-minus text-sm"></i>
+                </button>
+                <span class="quantity-display px-4 py-2 bg-white rounded-full font-bold text-brown text-lg min-w-[3rem] text-center border-2 border-cream shadow-inner">1</span>
+                <button class="quantity-btn w-10 h-10 bg-golden hover:bg-yellow-500 text-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
+                    onclick="changeQuantity('modal-{{ $product->id }}', 1)">
+                    <i class="fas fa-plus text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Action Button -->
+        @if($product->status == 'available' && $product->stock > 0)
+        <button class="add-to-cart-btn w-full bg-golden hover:bg-yellow-500 text-white px-6 py-3 rounded-full font-bold text-lg transition-all duration-300 hover:transform hover:scale-105 shadow-lg"
+            data-product-id="{{ $product->id }}"
+            data-product-name="{{ $product->name }}"
+            data-product-price="{{ $product->price }}"
+            data-product-image="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/600x400/png' }}"
+            data-product-category="{{ $product->category->name ?? 'Uncategorized' }}">
+            <i class="fas fa-shopping-cart mr-2"></i>
+            Tambah ke Keranjang
+        </button>
+        @else
+        <button class="w-full bg-gray-400 text-white px-6 py-3 rounded-full font-bold text-lg cursor-not-allowed opacity-50" disabled>
+            <i class="fas fa-times mr-2"></i>
+            Stok Habis
+        </button>
+        @endif
+    </div>
     </div>
     </div>
     @endforeach
@@ -260,6 +260,7 @@
                 this.cart = this.getCart();
                 this.initializeEventListeners();
                 this.updateNavCartCount();
+                this.handleCategoryFromHome(); // Tambahan untuk handle kategori dari home
             }
 
             getCart() {
@@ -294,13 +295,12 @@
 
             showSuccessNotification(message) {
                 const notification = document.getElementById('success-notification');
-                const messageSpan = document.getElementById('notification-message');
-                messageSpan.textContent = message;
 
                 notification.classList.remove('translate-x-[calc(100%+2rem)]');
-                notification.classList.remove('translate-x-0');
+                notification.classList.add('translate-x-0');
 
                 setTimeout(() => {
+                    notification.classList.remove('translate-x-0');
                     notification.classList.add('translate-x-[calc(100%+2rem)]');
                 }, 3000);
             }
@@ -311,6 +311,111 @@
                     const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
                     cartCount.textContent = totalItems;
                 }
+            }
+
+            // Fungsi untuk handle kategori dari home (Updated)
+            handleCategoryFromHome() {
+                // Cek URL parameter untuk slug
+                const urlParams = new URLSearchParams(window.location.search);
+                const categoryFromUrl = urlParams.get('category');
+
+                // Cek localStorage
+                const savedCategory = localStorage.getItem('selectedCategory');
+
+                // Cek jika URL mengandung slug kategori (dari route kategori)
+                const currentPath = window.location.pathname;
+                const categorySlugMatch = currentPath.match(/\/produk\/kategori\/([^\/]+)/);
+
+                let targetCategoryId = null;
+                let targetCategorySlug = null;
+
+                if (categorySlugMatch) {
+                    // Jika URL menggunakan slug kategori
+                    targetCategorySlug = categorySlugMatch[1];
+
+                    // Cari kategori berdasarkan slug dari DOM
+                    const allTabs = document.querySelectorAll('.category-tab[data-category^="category-"]');
+                    for (const tab of allTabs) {
+                        const tabCategoryName = tab.textContent.trim();
+                        const tabSlug = this.generateSlug(tabCategoryName);
+                        if (tabSlug === targetCategorySlug) {
+                            targetCategoryId = tab.getAttribute('data-category').replace('category-', '');
+                            break;
+                        }
+                    }
+                } else if (categoryFromUrl) {
+                    // Jika menggunakan parameter URL biasa
+                    targetCategoryId = categoryFromUrl;
+                } else if (savedCategory) {
+                    // Jika ada di localStorage
+                    const categoryData = JSON.parse(savedCategory);
+                    targetCategoryId = categoryData.id;
+                    targetCategorySlug = categoryData.slug;
+                }
+
+                if (targetCategoryId) {
+                    // Aktifkan tab kategori yang sesuai
+                    setTimeout(() => {
+                        const targetTab = document.querySelector(`[data-category="category-${targetCategoryId}"]`);
+                        if (targetTab) {
+                            // Reset semua tab
+                            document.querySelectorAll('.category-tab').forEach(tab => {
+                                tab.classList.remove('bg-yellow-400', 'text-white');
+                                tab.classList.add('text-gray-800');
+                            });
+
+                            // Aktifkan tab target
+                            targetTab.classList.add('bg-yellow-400', 'text-white');
+                            targetTab.classList.remove('text-gray-800');
+
+                            // Filter produk
+                            this.filterByCategory(`category-${targetCategoryId}`);
+
+                            // Scroll ke section produk
+                            const productSection = document.querySelector('#product-grid');
+                            if (productSection) {
+                                productSection.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                            }
+                        }
+                    }, 100);
+
+                    // Clear localStorage setelah digunakan
+                    if (savedCategory) {
+                        localStorage.removeItem('selectedCategory');
+                    }
+                }
+            }
+
+            // Helper function untuk generate slug
+            generateSlug(text) {
+                return text
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .trim();
+            }
+
+            filterByCategory(category) {
+                const products = document.querySelectorAll('.product-item');
+                products.forEach(product => {
+                    if (category === 'all' || product.classList.contains(category)) {
+                        product.classList.remove('hidden');
+                        setTimeout(() => {
+                            product.style.opacity = '1';
+                            product.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else {
+                        product.style.opacity = '0';
+                        product.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            product.classList.add('hidden');
+                        }, 300);
+                    }
+                });
             }
 
             initializeEventListeners() {
@@ -356,30 +461,45 @@
 
                         const category = tab.getAttribute('data-category');
                         this.filterByCategory(category);
+
+                        // Update URL dengan slug instead of ID
+                        const urlParams = new URLSearchParams(window.location.search);
+                        if (category !== 'all') {
+                            const categoryName = tab.textContent.trim();
+                            const categorySlug = this.generateSlug(categoryName);
+
+                            // Redirect ke route dengan slug
+                            window.history.pushState({}, '', `/product/category/${categorySlug}`);
+                        } else {
+                            // Redirect ke halaman produk utama
+                            window.history.pushState({}, '', '/product');
+                        }
                     });
                 });
 
-                const firstTab = document.querySelector('.category-tab');
-                if (firstTab) {
-                    firstTab.classList.add('bg-yellow-400', 'text-white');
-                    firstTab.classList.remove('text-gray-800');
-                }
-            }
+                // Set active tab on load (Updated logic)
+                const urlParams = new URLSearchParams(window.location.search);
+                const savedCategory = localStorage.getItem('selectedCategory');
+                const currentPath = window.location.pathname;
+                const categorySlugMatch = currentPath.match(/\/produk\/kategori\/([^\/]+)/);
 
-            filterByCategory(category) {
-                const products = document.querySelectorAll('.product-item');
-                products.forEach(product => {
-                    if (category === 'all' || product.classList.contains(category)) {
-                        product.classList.remove('hidden');
-                    } else {
-                        product.classList.add('hidden');
+                if (!urlParams.get('category') && !savedCategory && !categorySlugMatch) {
+                    const firstTab = document.querySelector('.category-tab');
+                    if (firstTab) {
+                        firstTab.classList.add('bg-yellow-400', 'text-white');
+                        firstTab.classList.remove('text-gray-800');
                     }
-                });
+                }
             }
         }
 
-        // ✅ Enhanced modal & global interaction
+        // Enhanced modal & global interactions
         document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth transitions to product items
+            document.querySelectorAll('.product-item').forEach(item => {
+                item.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+
             window.showModal = function(modalId) {
                 const modal = document.getElementById(modalId);
                 if (modal) {
@@ -451,7 +571,7 @@
                 });
             });
 
-            // Inisialisasi cart
+            // Initialize cart
             window.productCart = new ProductPageCart();
         });
     </script>

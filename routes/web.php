@@ -12,6 +12,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/product/cart', [ProductController::class, 'cart'])->name('product.cart');
+Route::get('/product/category/{slug}', [ProductController::class, 'category'])->name('products.category');
+Route::get('/product/category-id/{id}', [ProductController::class, 'categoryById'])->name('products.category.id');
 
 Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 
