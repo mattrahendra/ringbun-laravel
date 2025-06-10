@@ -57,6 +57,17 @@ class BlogResource extends Resource
                     ->default('draft')
                     ->required(),
 
+                // Type
+                Select::make('type')
+                    ->label('Tipe Blog')
+                    ->options([
+                        'blog' => 'Blog',
+                        'event' => 'Event',
+                        'promo' => 'Promo',
+                    ])
+                    ->default('blog')
+                    ->required(),
+
                 // Publish Date
                 DateTimePicker::make('published_at')
                     ->label('Published At'),
@@ -70,6 +81,7 @@ class BlogResource extends Resource
                 Tables\Columns\TextColumn::make('title')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('slug'),
                 Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('type')->label('Tipe')->badge(),
                 Tables\Columns\TextColumn::make('published_at')->dateTime(),
                 Tables\Columns\ImageColumn::make('thumbnail')->label('Thumb'),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->label('Created'),
@@ -83,6 +95,13 @@ class BlogResource extends Resource
                         'archived' => 'Archived',
                     ])
                     ->label('Status'),
+                Tables\Filters\SelectFilter::make('type')
+                    ->options([
+                        'blog' => 'Blog',
+                        'event' => 'Event',
+                        'promo' => 'Promo',
+                    ])
+                    ->label('Tipe'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

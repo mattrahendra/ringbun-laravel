@@ -20,7 +20,7 @@
             <!-- Slide 1 - Featured Product -->
             <div class="carousel-slide absolute inset-0 opacity-100 z-10">
                 <div class="absolute inset-0">
-                    <img src="https://images.unsplash.com/photo-1549340418-33643752985e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                    <img src="https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80"
                         alt="Sweet Buns Collection"
                         class="w-full h-full object-cover">
                     <div class="slide-content absolute inset-0"></div>
@@ -68,7 +68,7 @@
             <!-- Slide 2 - Event Promo -->
             <div class="carousel-slide absolute inset-0 opacity-0 z-0">
                 <div class="absolute inset-0">
-                    <img src="https://images.unsplash.com/photo-1464349095-e6ca5ac5f17a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                    <img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
                         alt="Birthday Celebration"
                         class="w-full h-full object-cover">
                     <div class="slide-content absolute inset-0"></div>
@@ -309,62 +309,39 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Event 1 -->
+                <!-- Event -->
+                @foreach($blogs as $blog)
                 <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg">
-                    <img src="https://images.unsplash.com/photo-1464349095-e6ca5ac5f17a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80"
-                        alt="Birthday Discount"
+                    <img src="{{ $blog->image ? asset('storage/' . $blog->image) : 'https://placehold.co/300x200/png' }}"
+                        alt="{{ $blog->title }}"
                         class="w-full h-48 object-cover">
                     <div class="p-6">
                         <div class="flex items-center gap-2 mb-3">
                             <div class="bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold">
-                                31 Maret 2025
+                                {{ $blog->created_at->format('d F Y') }}
                             </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-brown mb-3">Diskon 20% Ulang Tahun Ringbun</h3>
-                        <p class="text-gray-600 mb-4">Dalam rangka ulang tahun ke-5, nikmati diskon 20% untuk semua menu roti dan pastry setiap hari Sabtu.</p>
-                        <button class="text-golden font-semibold hover:text-yellow-600 transition-colors">
-                            Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Event 2 -->
-                <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg">
-                    <img src="https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80"
-                        alt="Cupcake Workshop"
-                        class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex items-center gap-2 mb-3">
+                            @if($blog->type === 'promo')
                             <div class="bg-brown text-white px-3 py-1 rounded-full text-sm font-semibold">
-                                15 Februari 2025
+                                Promo
                             </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-brown mb-3">Workshop Cupcake Gratis</h3>
-                        <p class="text-gray-600 mb-4">Bergabunglah dalam workshop pembuatan cupcake bersama tim ahli kami, gratis untuk 20 peserta pertama!</p>
-                        <button class="text-golden font-semibold hover:text-yellow-600 transition-colors">
-                            Daftar Sekarang <i class="fas fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Event 3 -->
-                <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg">
-                    <img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1387&q=80"
-                        alt="Summer Gelato"
-                        class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex items-center gap-2 mb-3">
+                            @elseif($blog->type === 'event')
                             <div class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                                05 Januari 2025
+                                Event
                             </div>
+                            @endif
                         </div>
-                        <h3 class="text-xl font-bold text-brown mb-3">Gelato Spesial Musim Panas</h3>
-                        <p class="text-gray-600 mb-4">Cicipi varian gelato baru kami dengan harga khusus: beli 2 gratis 1, hanya di bulan Januari!</p>
-                        <button class="text-golden font-semibold hover:text-yellow-600 transition-colors">
+                        <h3 class="text-xl font-bold text-brown mb-3">{{ $blog->title }}</h3>
+                        <p class="text-gray-600 mb-4">{{ Str::limit(strip_tags($blog->content), 100) }}</p>
+                        <a href="{{ route('blog.show', $blog->slug) }}" class="text-golden font-semibold hover:text-yellow-600 transition-colors">
+                            @if($blog->type === 'promo')
                             Coba Sekarang <i class="fas fa-arrow-right ml-1"></i>
-                        </button>
+                            @else
+                            Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                            @endif
+                        </a>
                     </div>
                 </div>
+                @endforeach
             </div>
         </div>
     </section>

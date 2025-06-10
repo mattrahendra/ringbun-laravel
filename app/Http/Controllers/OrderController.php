@@ -47,8 +47,8 @@ class OrderController extends Controller
             $whatsappMessage = $this->formatWhatsAppMessage($order);
 
             // Generate WhatsApp URL
-            $whatsappNumber = '6282268438151';
-            //$whatsappNumber = '6285161399003'; // Ganti dengan nomor WhatsApp toko
+            // $whatsappNumber = '6282268438151';
+            $whatsappNumber = '6285161399003'; // Ganti dengan nomor WhatsApp toko
             $whatsappUrl = "https://wa.me/{$whatsappNumber}?text=" . urlencode($whatsappMessage);
 
             return response()->json([

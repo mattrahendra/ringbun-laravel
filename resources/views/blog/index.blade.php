@@ -132,12 +132,19 @@
                             <span class="bg-white/90 text-brown px-3 py-1 rounded-full text-xs font-bold">
                                 {{ $blog->published_at->format('M d') }}
                             </span>
+
                         </div>
                     </div>
                     <div class="p-6">
                         <div class="flex items-center gap-2 mb-3">
                             <div class="w-2 h-2 bg-golden rounded-full"></div>
-                            <span class="text-gray-500 text-xs font-medium uppercase tracking-wide">ARTIKEL</span>
+                            @if($blog->type === 'promo')
+                            <span class="text-gray-500 text-xs font-medium uppercase tracking-wide">PROMO</span>
+                            @elseif($blog->type === 'event')
+                            <span class="text-gray-500 text-xs font-medium uppercase tracking-wide">EVENT</span>
+                            @else
+                            <span class="text-gray-500 text-xs font-medium uppercase tracking-wide">BLOG</span>
+                            @endif
                         </div>
                         <h3 class="text-xl font-bold text-brown mb-3 leading-tight line-clamp-2">
                             {{ $blog->title }}

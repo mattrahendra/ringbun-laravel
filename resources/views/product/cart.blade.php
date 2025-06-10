@@ -55,7 +55,7 @@
                         </div>
                     </div>
 
-                    <!-- Recommended Products -->
+                    <!-- Recommended Products - Updated Section -->
                     <div class="mt-8 bg-white rounded-3xl shadow-lg overflow-hidden">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold text-brown mb-6 flex items-center">
@@ -63,41 +63,35 @@
                                 Rekomendasi Untuk Anda
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- Recommended Item 1 -->
+                                @forelse($products as $product)
                                 <div class="card-hover border border-gray-100 rounded-2xl p-4 group">
                                     <div class="flex gap-4">
-                                        <img src="https://images.unsplash.com/photo-1549340418-33643752985e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
-                                            alt="Chocolate Bun"
+                                        <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/150' }}"
+                                            alt="{{ $product->name }}"
                                             class="w-20 h-20 object-cover rounded-xl group-hover:scale-110 transition-transform duration-300">
                                         <div class="flex-1">
-                                            <h4 class="font-bold text-brown mb-1">Chocolate Sweet Bun</h4>
-                                            <p class="text-sm text-gray-600 mb-2">Roti manis dengan isian cokelat premium</p>
-                                            <p class="text-golden font-bold">Rp 18.000</p>
+                                            <h4 class="font-bold text-brown mb-1">{{ $product->name }}</h4>
+                                            <p class="text-sm text-gray-600 mb-2">{{$product->category->name}}</p>
+                                            <p class="text-golden font-bold">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                                         </div>
                                     </div>
-                                    <button class="w-full mt-3 bg-golden/10 hover:bg-golden text-golden hover:text-white py-2 rounded-lg font-semibold transition-all duration-300" onclick="addRecommendedToCart(1, 'Chocolate Sweet Bun', 18000, 'https://images.unsplash.com/photo-1549340418-33643752985e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80', 'Sweet Buns')">
+                                    <button class="w-full mt-3 bg-golden/10 hover:bg-golden text-golden hover:text-white py-2 rounded-lg font-semibold transition-all duration-300"
+                                        onclick="addRecommendedToCart(
+                                            {{ $product->id }},
+                                            '{{ addslashes($product->name) }}',
+                                            {{ $product->price }},
+                                            '{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/150' }}',
+                                            '{{ addslashes($product->category->name ?? 'Product') }}'
+                                        )">
                                         <i class="fas fa-plus mr-1"></i>
                                         Tambah
                                     </button>
                                 </div>
-
-                                <!-- Recommended Item 2 -->
-                                <div class="card-hover border border-gray-100 rounded-2xl p-4 group">
-                                    <div class="flex gap-4">
-                                        <img src="https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
-                                            alt="Beef Bun"
-                                            class="w-20 h-20 object-cover rounded-xl group-hover:scale-110 transition-transform duration-300">
-                                        <div class="flex-1">
-                                            <h4 class="font-bold text-brown mb-1">Beef Savory Bun</h4>
-                                            <p class="text-sm text-gray-600 mb-2">Roti gurih dengan isian daging sapi</p>
-                                            <p class="text-golden font-bold">Rp 22.000</p>
-                                        </div>
-                                    </div>
-                                    <button class="w-full mt-3 bg-golden/10 hover:bg-golden text-golden hover:text-white py-2 rounded-lg font-semibold transition-all duration-300" onclick="addRecommendedToCart(2, 'Beef Savory Bun', 22000, 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80', 'Savory Buns')">
-                                        <i class="fas fa-plus mr-1"></i>
-                                        Tambah
-                                    </button>
+                                @empty
+                                <div class="col-span-2 text-center py-8">
+                                    <p class="text-gray-500">Tidak ada produk rekomendasi tersedia</p>
                                 </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>
@@ -633,15 +627,28 @@
         }
 
         // Fungsi untuk tambah produk dari rekomendasi
-        function addRecommendedToCart(id, name, price, image, category) {
+        function addRecommendedToCart(id, name, price, image, category = 'Product') {
+            // Validasi parameter
+            if (!id || !name || !price) {
+                console.error('Parameter tidak lengkap untuk addRecommendedToCart');
+                cartManager.showErrorNotification('Terjadi kesalahan saat menambahkan produk');
+                return;
+            }
+
             const productData = {
-                id,
-                name,
-                price,
-                image,
-                category
+                id: parseInt(id),
+                name: name.toString(),
+                price: parseInt(price),
+                image: image || 'https://via.placeholder.com/150',
+                category: category.toString()
             };
-            cartManager.addToCart(productData, 1);
+
+            // Pastikan cartManager sudah diinisialisasi
+            if (typeof cartManager !== 'undefined' && cartManager) {
+                cartManager.addToCart(productData, 1);
+            } else {
+                console.error('CartManager belum diinisialisasi');
+            }
         }
 
         // Inisialisasi saat halaman dimuat

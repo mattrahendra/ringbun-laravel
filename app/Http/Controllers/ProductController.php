@@ -24,9 +24,9 @@ class ProductController extends Controller
 
         // Hanya apply search filter di server-side
         if ($query) {
-            $productsQuery->where(function($q) use ($query) {
+            $productsQuery->where(function ($q) use ($query) {
                 $q->where('name', 'like', '%' . $query . '%')
-                ->orWhere('description', 'like', '%' . $query . '%');
+                    ->orWhere('description', 'like', '%' . $query . '%');
             });
         }
 
@@ -64,9 +64,9 @@ class ProductController extends Controller
         }
 
         if ($query) {
-            $productsQuery->where(function($q) use ($query) {
+            $productsQuery->where(function ($q) use ($query) {
                 $q->where('name', 'like', '%' . $query . '%')
-                ->orWhere('description', 'like', '%' . $query . '%');
+                    ->orWhere('description', 'like', '%' . $query . '%');
             });
         }
 
@@ -91,6 +91,7 @@ class ProductController extends Controller
 
     public function cart()
     {
-        return view('product.cart');
+        $products = Product::with('category')->where('stock', '>', 0)->inRandomOrder()->limit(2)->get();
+        return view('product.cart', compact('products'));
     }
 }

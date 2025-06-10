@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->string('slug')->unique()->after('name');
+        Schema::table('blogs', function (Blueprint $table) {
+            $table->enum('type', ['blog', 'event', 'promo'])->default('blog')->after('image');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('slug');
+        Schema::table('blogs', function (Blueprint $table) {
+            $table->dropColumn('type');
         });
     }
 };
