@@ -19,8 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
             })
         );
 
-        // Redirect ke halaman produk dengan slug kategori
-        window.location.href = `/product/category/${categorySlug}`;
+        // Redirect ke halaman produk utama dengan parameter kategori (opsional)
+        // Bisa juga langsung ke /product tanpa parameter karena filtering akan dilakukan client-side
+        window.location.href = `/product?category=${categoryId}`;
     }
 
     // Event listener untuk semua tombol "Lihat Produk" di section kategori
@@ -31,6 +32,12 @@ document.addEventListener("DOMContentLoaded", function () {
             // Ambil data kategori dari tombol
             const categoryId = this.getAttribute("data-category-id");
             const categoryName = this.getAttribute("data-category-name");
+
+            // Validasi data
+            if (!categoryId || !categoryName) {
+                console.error('Category data not found on button');
+                return;
+            }
 
             // Tambahkan efek loading pada tombol
             const originalText = this.innerHTML;
@@ -45,30 +52,69 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Alternative: Direct link navigation (jika ingin menggunakan link biasa)
+    // Alternative: Direct link navigation untuk link biasa (jika ada)
     function setupDirectLinks() {
         document.querySelectorAll(".category-direct-link").forEach((link) => {
-            const categoryName = link.getAttribute("data-category-name");
-            const categorySlug = categoryName
-                .toLowerCase()
-                .replace(/[^a-z0-9\s-]/g, "")
-                .replace(/\s+/g, "-")
-                .replace(/-+/g, "-")
-                .trim();
+            link.addEventListener("click", function(e) {
+                e.preventDefault();
 
-            link.href = `/produk/kategori/${categorySlug}`;
+                const categoryId = this.getAttribute("data-category-id");
+                const categoryName = this.getAttribute("data-category-name");
+
+                if (categoryId && categoryName) {
+                    redirectToProductWithCategory(categoryId, categoryName);
+                } else {
+                    // Fallback: navigate normally
+                    window.location.href = this.href;
+                }
+            });
         });
     }
 
     // Setup direct links if they exist
     setupDirectLinks();
 
+    // Fungsi untuk navigasi langsung tanpa efek loading (untuk link biasa)
+    function quickRedirectToCategory(categoryId, categoryName) {
+        const categorySlug = categoryName
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, "")
+            .replace(/\s+/g, "-")
+            .replace(/-+/g, "-")
+            .trim();
+
+        localStorage.setItem(
+            "selectedCategory",
+            JSON.stringify({
+                id: categoryId,
+                name: categoryName,
+                slug: categorySlug,
+            })
+        );
+
+        window.location.href = `/product?category=${categoryId}`;
+    }
+
+    // Expose function globally if needed
+    window.quickRedirectToCategory = quickRedirectToCategory;
+
     // Smooth scroll ke section produk jika ada hash #products
     if (window.location.hash === "#products") {
         setTimeout(() => {
-            document.getElementById("products").scrollIntoView({
-                behavior: "smooth",
-            });
+            const productsSection = document.getElementById("products");
+            if (productsSection) {
+                productsSection.scrollIntoView({
+                    behavior: "smooth",
+                });
+            }
         }, 100);
     }
+
+    // Optional: Handle back button to clear localStorage
+    window.addEventListener('pageshow', function(event) {
+        // Clear selected category if user navigates back to home page
+        if (window.location.pathname === '/' || window.location.pathname === '/home') {
+            localStorage.removeItem('selectedCategory');
+        }
+    });
 });

@@ -12,28 +12,17 @@ class ProductController extends Controller
     {
         $query = $request->query('q');
         $sort = $request->query('sort', 'name_asc');
-        $categoryParam = $request->get('category'); // Bisa ID atau slug
 
+        // Load semua kategori
         $categories = Category::with(['products' => function ($query) {
             $query->where('status', 'available');
         }])->get();
 
+        // Load semua produk tanpa filter kategori (untuk client-side filtering)
         $productsQuery = Product::with('category')
             ->where('status', 'available');
 
-        if ($categoryParam) {
-            // Cek apakah parameter adalah ID (numeric) atau slug (string)
-            if (is_numeric($categoryParam)) {
-                $productsQuery->where('category_id', $categoryParam);
-            } else {
-                // Cari berdasarkan slug kategori
-                $category = Category::where('slug', $categoryParam)->first();
-                if ($category) {
-                    $productsQuery->where('category_id', $category->id);
-                }
-            }
-        }
-
+        // Hanya apply search filter di server-side
         if ($query) {
             $productsQuery->where(function($q) use ($query) {
                 $q->where('name', 'like', '%' . $query . '%')
@@ -41,7 +30,7 @@ class ProductController extends Controller
             });
         }
 
-        // Sorting
+        // Sorting tetap di server-side
         switch ($sort) {
             case 'name_desc':
                 $productsQuery->orderBy('name', 'desc');
@@ -58,34 +47,46 @@ class ProductController extends Controller
 
         $products = $productsQuery->get();
 
-        return view('product.index', compact('products', 'categories', 'query', 'sort', 'categoryParam'));
+        return view('product.index', compact('products', 'categories', 'query', 'sort'));
     }
 
-    public function category($slug)
+    public function getProducts(Request $request)
     {
-        $category = Category::where('slug', $slug)->firstOrFail();
+        $query = $request->query('q');
+        $sort = $request->query('sort', 'name_asc');
+        $categoryId = $request->query('category');
 
-        $products = Product::where('category_id', $category->id)
-            ->where('status', 'available')
-            ->orderBy('name', 'asc')
-            ->get();
+        $productsQuery = Product::with('category')
+            ->where('status', 'available');
 
-        $categories = Category::with(['products' => function($query) {
-            $query->where('status', 'available');
-        }])->get();
+        if ($categoryId && $categoryId !== 'all') {
+            $productsQuery->where('category_id', $categoryId);
+        }
 
-        return view('product.index', compact('products', 'categories', 'category'))
-            ->with('query', null)
-            ->with('sort', 'name_asc')
-            ->with('categoryParam', $slug);
-    }
+        if ($query) {
+            $productsQuery->where(function($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%')
+                ->orWhere('description', 'like', '%' . $query . '%');
+            });
+        }
 
-    public function categoryById($id)
-    {
-        $category = Category::findOrFail($id);
+        switch ($sort) {
+            case 'name_desc':
+                $productsQuery->orderBy('name', 'desc');
+                break;
+            case 'price_asc':
+                $productsQuery->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $productsQuery->orderBy('price', 'desc');
+                break;
+            default:
+                $productsQuery->orderBy('name', 'asc');
+        }
 
-        // Redirect ke route dengan slug untuk SEO-friendly URL
-        return redirect()->route('products.category', ['slug' => $category->slug]);
+        $products = $productsQuery->get();
+
+        return response()->json($products);
     }
 
     public function cart()
