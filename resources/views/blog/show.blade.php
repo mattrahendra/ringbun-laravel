@@ -3,9 +3,16 @@
 
 <head>
     @include('components.head')
-    <title>Ring Bun - {{ $blog->title }}</title>
-    <meta name="description" content="{{ Str::limit(strip_tags($blog->content), 160) }}">
-    <meta name="keywords" content="Ring Bun Blog, {{ $blog->title }}, Bakery, Artikel">
+    <title>{{ $blog->title }} | Ring Bun</title>
+    <meta name="title" content ="{{ $blog->meta_title }}">
+    <meta name="description" content="{{ $blog->meta_description }}">
+    <meta name="keywords" content="Ring Bun Blog, {{ $blog->meta_keywords }}, Bakery, Artikel">
+    <link rel="canonical" href="{{ $blog->canonical_url }}">
+    <meta property="og:title" content="{{ $blog->meta_title }}">
+    <meta property="og:description" content="{{ $blog->meta_description }}">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="{{ $blog->image ? asset('storage/' . $blog->image) : asset('images/default-blog.jpg') }}">
+    <meta property="og:url" content="{{ $blog->canonical_url }}">
     <script src="{{ asset('/js/blog/blog.js') }}" defer></script>
     <script>
     window.blogData = {
